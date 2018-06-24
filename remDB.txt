@@ -1,0 +1,57 @@
+CREATE TYPE return_type AS 
+("Id" integer,"Content" TEXT, "ReplyTo" integer, "ThreadId" integer,
+"UserId" integer, "GroupId" integer, "NrReplies" integer, "UserName" varchar);
+
+CREATE OR REPLACE FUNCTION getComments(ThreadId integer, lastCommentId integer DEFAULT NULL) 
+RETURNS SETOF return_type  AS $getComments$
+DECLARE
+	commentR record;
+	replyR record;
+	repliesLimit integer = 3;
+	commentsLimit integer = 4;
+	    	
+	replyCursor CURSOR(commentR_ID integer,repliesLimit integer) FOR SELECT "Comments"."Id","Content","ReplyTo","ThreadId","UserId","GroupId", 0 as "NrReplies", "AspNetUsers"."UserName"  
+FROM "Comments" 
+	INNER JOIN "AspNetUsers" ON "UserId" = "AspNetUsers"."Id" WHERE "GroupId" = commentR_ID 
+ORDER BY "Id" ASC LIMIT repliesLimit;
+
+
+-------
+commentQuery TEXT;
+
+BEGIN
+
+commentQuery := 'SELECT "Comments"."Id","Content","ReplyTo","ThreadId","UserId","GroupId",0 as "NrReplies", "AspNetUsers"."UserName" 
+   FROM "Comments" 
+	INNER JOIN "AspNetUsers" ON "UserId" = "AspNetUsers"."Id" WHERE "ThreadId" = $1 AND "ReplyTo" is null';
+
+IF lastCommentId IS NOT NULL THEN
+commentQuery := commentQuery || ' AND "Comments"."Id"<' || lastCommentId;
+END IF;
+
+
+commentQuery := commentQuery || ' ORDER BY "Id" DESC LIMIT $2';
+
+
+----------main
+   FOR commentR IN EXECUTE commentQuery USING ThreadId, commentsLimit
+   LOOP
+	commentR."NrReplies" := (SELECT COUNT(Id) FROM "Comments" WHERE  "GroupId" = commentR.Id);
+	return next commentR;
+		
+	FOR replyR IN replyCursor(commentR.Id, repliesLimit)
+	LOOP
+		return NEXT replyR;
+	END LOOP;
+	
+	
+   END LOOP;
+
+
+  
+   return;
+
+END;
+$getComments$ LANGUAGE plpgsql;
+
+SELECT * from getComments(1)

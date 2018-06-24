@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.Extensions.Configuration;
+using App.Config;
 
 namespace App
 {
@@ -22,10 +23,10 @@ namespace App
         }
         public void ConfigureServices(IServiceCollection services){
 
-            services.AddMvc();
+            services.AddMvc(options => options.Conventions.Insert(0,new ModeRouteConvention()));
 
 
-            if(true){
+            if(false){
                 services.AddDbContext<AppDbContext>(option => option.UseSqlite(Configuration["db:connectionString"]) );
             }else{
 
@@ -33,9 +34,7 @@ namespace App
                     options.UseNpgsql("Server=localhost;Database=App;Username=postgres;Password=123456")
                 );
             }
-            //TemplateRepo ICommentRepo
-            //services.AddScoped<TemplateRepo<AppDbContext>>();
-            
+
             services.AddTransient<ICommentRepo, CommentRepo>();
         }
 

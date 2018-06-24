@@ -11,9 +11,9 @@ namespace App.Models{
 
         public string Content { get; set; }
         public int ReplyTo { get; set; }
-        public int GroupId { get; set; }
+        public int ?GroupId { get; set; }
         public int ThreadId { get; set; }//fk
-        //public int UserId { get; set; } //fk
+        public string UserId { get; set; } //fk //rem - add later
 
     }
 

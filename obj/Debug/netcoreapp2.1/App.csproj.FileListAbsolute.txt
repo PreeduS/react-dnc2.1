@@ -26,3 +26,17 @@ C:\Users\laurentiu.tamasila\Desktop\react-dnc2\obj\Debug\netcoreapp2.1\App.Assem
 C:\Users\laurentiu.tamasila\Desktop\react-dnc2\obj\Debug\netcoreapp2.1\App.RazorTargetAssemblyInfo.cache
 C:\Users\laurentiu.tamasila\Desktop\react-dnc2\obj\Debug\netcoreapp2.1\App.dll
 C:\Users\laurentiu.tamasila\Desktop\react-dnc2\obj\Debug\netcoreapp2.1\App.pdb
+D:\C# projects\react-dnc2.1\App\bin\Debug\netcoreapp2.1\App.deps.json
+D:\C# projects\react-dnc2.1\App\bin\Debug\netcoreapp2.1\App.runtimeconfig.json
+D:\C# projects\react-dnc2.1\App\bin\Debug\netcoreapp2.1\App.runtimeconfig.dev.json
+D:\C# projects\react-dnc2.1\App\bin\Debug\netcoreapp2.1\App.dll
+D:\C# projects\react-dnc2.1\App\bin\Debug\netcoreapp2.1\App.pdb
+D:\C# projects\react-dnc2.1\App\obj\Debug\netcoreapp2.1\App.csprojAssemblyReference.cache
+D:\C# projects\react-dnc2.1\App\obj\Debug\netcoreapp2.1\App.csproj.CoreCompileInputs.cache
+D:\C# projects\react-dnc2.1\App\obj\Debug\netcoreapp2.1\App.RazorAssemblyInfo.cache
+D:\C# projects\react-dnc2.1\App\obj\Debug\netcoreapp2.1\App.RazorAssemblyInfo.cs
+D:\C# projects\react-dnc2.1\App\obj\Debug\netcoreapp2.1\App.AssemblyInfoInputs.cache
+D:\C# projects\react-dnc2.1\App\obj\Debug\netcoreapp2.1\App.AssemblyInfo.cs
+D:\C# projects\react-dnc2.1\App\obj\Debug\netcoreapp2.1\App.RazorTargetAssemblyInfo.cache
+D:\C# projects\react-dnc2.1\App\obj\Debug\netcoreapp2.1\App.dll
+D:\C# projects\react-dnc2.1\App\obj\Debug\netcoreapp2.1\App.pdb
