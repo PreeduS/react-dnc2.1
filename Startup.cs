@@ -12,6 +12,7 @@ using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using App.Config;
+using Microsoft.AspNetCore.Identity;
 
 namespace App
 {
@@ -26,7 +27,7 @@ namespace App
             services.AddMvc(options => options.Conventions.Insert(0,new ModeRouteConvention()));
 
 
-            if(false){
+            if(true){
                 services.AddDbContext<AppDbContext>(option => option.UseSqlite(Configuration["db:connectionString"]) );
             }else{
 
@@ -36,6 +37,30 @@ namespace App
             }
 
             services.AddTransient<ICommentRepo, CommentRepo>();
+            services.AddTransient<IUserManagerRepo, UserManagerRepo>();
+
+            //Identity
+            services.AddIdentity<ApplicationUser,IdentityRole>()
+            .AddEntityFrameworkStores<AppDbContext>()                                       //.AddErrorDescriber<IdentityErrorDescriber>()
+            .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>{
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.User.RequireUniqueEmail = true;
+            });
+
+            services.ConfigureApplicationCookie(options => {
+                options.ExpireTimeSpan = TimeSpan.FromDays(14);
+                options.Cookie.Expiration = TimeSpan.FromDays(14);
+                //options.LoginPath = "/path/path";
+            });
+
+
+
         }
 
         
@@ -44,6 +69,8 @@ namespace App
             if (env.IsDevelopment()){
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseAuthentication();
          
             app.UseStaticFiles( new StaticFileOptions(){
                 FileProvider = new PhysicalFileProvider( Path.Combine(Directory.GetCurrentDirectory(), "FE") ),
