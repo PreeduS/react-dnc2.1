@@ -38,7 +38,7 @@ namespace App.Repos{
         }
         public async Task<IEnumerable<Comment>> LoadCommentsAsync(int ThreadId){
             var result = await Context.Set<Comment>()
-                .FromSql("SELECT * from \"getComments({0})\"", ThreadId).ToListAsync();
+                .FromSql("SELECT * from getComments({0})", ThreadId).ToListAsync();
 
             //List<CommentViewModel> resultVModel = MapComments(result);
 
@@ -47,7 +47,7 @@ namespace App.Repos{
         //LoadMoreComments
         public async Task<IEnumerable<Comment>> LoadMoreCommentsAsync( int ThreadId, int LastId){
             var result = await Context.Set<Comment>()
-                .FromSql("SELECT * from \"getComments({0},{1})\"", ThreadId, LastId).ToListAsync();
+                .FromSql("SELECT * from getComments({0},{1})", ThreadId, LastId).ToListAsync();
 
             //List<CommentViewModel> resultVModel = MapComments(result);
 

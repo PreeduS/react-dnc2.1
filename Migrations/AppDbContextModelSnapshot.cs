@@ -78,15 +78,18 @@ namespace App.Migrations
 
                     b.Property<int?>("GroupId");
 
-                    b.Property<int>("ReplyTo");
+                    b.Property<int?>("ReplyTo");
 
                     b.Property<int>("ThreadId");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
                     b.HasIndex("ThreadId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -223,6 +226,11 @@ namespace App.Migrations
                     b.HasOne("App.Models.Thread")
                         .WithMany("Comments")
                         .HasForeignKey("ThreadId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("App.Models.ApplicationUser", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

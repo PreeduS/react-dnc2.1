@@ -27,7 +27,7 @@ namespace App
             services.AddMvc(options => options.Conventions.Insert(0,new ModeRouteConvention()));
 
 
-            if(true){
+            if(false){
                 services.AddDbContext<AppDbContext>(option => option.UseSqlite(Configuration["db:connectionString"]) );
             }else{
 
@@ -46,6 +46,8 @@ namespace App
 
             services.Configure<IdentityOptions>(options =>{
                 options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 6;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
@@ -73,7 +75,7 @@ namespace App
             app.UseAuthentication();
          
             app.UseStaticFiles( new StaticFileOptions(){
-                FileProvider = new PhysicalFileProvider( Path.Combine(Directory.GetCurrentDirectory(), "FE") ),
+                FileProvider = new PhysicalFileProvider( Path.Combine(Directory.GetCurrentDirectory(), "FE","build") ),
                 RequestPath = ""            
             });            
             app.UseMvc();

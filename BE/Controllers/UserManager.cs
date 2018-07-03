@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using App.IRepos;
+using App.Models;
+using App.Repos;
 using App.RequestModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
@@ -47,7 +50,33 @@ namespace App.Controllers{
             }
         
         }
+        [Route("Login")]
+        public async Task<IActionResult> Login(LoginRequestModel user){
 
+            if(User.Identity.IsAuthenticated){  //signInManager.IsSignedIn(User);
+                 return BadRequest(new {Success = false, Errors = "Already logged in as: "+ User.Identity.Name});
+            }
+
+            if(!ModelState.IsValid){
+                return BadRequest(new {Success = false, Errors = GetValidationErrors(ModelState)} );
+            }       
+
+            var result = await Repo.LoginAsync(user.Username, user.Password);
+       
+            if(result.Succeeded){
+                return Json(new {Success = true});
+            }else{
+                var IsLockedOut = result.IsLockedOut ? "IsLockedOut" : null;
+                var IsNotAllowed = result.IsNotAllowed ? "IsNotAllowed" : null;
+                var errors = IsLockedOut ?? IsNotAllowed ?? "Wrong username of password";
+                return BadRequest(new {Success = false, Errors = errors});
+            }
+        }
+        [Route("Logout")]
+        public IActionResult Logout(){
+            Repo.Logout();
+            return Json(new {Success = true});
+        }
 
 
         

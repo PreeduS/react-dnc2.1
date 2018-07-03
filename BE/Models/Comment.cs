@@ -10,10 +10,11 @@ namespace App.Models{
         public int Id { get; set; }
 
         public string Content { get; set; }
-        public int ReplyTo { get; set; }
+        public int ?ReplyTo { get; set; }
         public int ?GroupId { get; set; }
         public int ThreadId { get; set; }//fk
         public string UserId { get; set; } //fk //rem - add later
+        public ApplicationUser User {get; set; }
 
     }
 

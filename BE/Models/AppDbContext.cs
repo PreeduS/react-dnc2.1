@@ -23,10 +23,16 @@ namespace App.Models{
             modelBuilder.Entity<Thread>().Property(p => p.Id).UseNpgsqlIdentityAlwaysColumn();
 
             modelBuilder.Entity<Comment>().Property(p => p.GroupId).IsRequired(required:false);
+            modelBuilder.Entity<Comment>().Property(p => p.ReplyTo).IsRequired(required:false);
 
             modelBuilder.Entity<ApplicationUser>()
                 .HasMany(u => u.Threads).WithOne(t => t.User)
                 .HasForeignKey(t => t.UserId).HasPrincipalKey(u => u.Id)
+                .IsRequired();
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(u => u.Comments).WithOne(c => c.User)
+                .HasForeignKey(c => c.UserId).HasPrincipalKey(u =>u.Id)
                 .IsRequired();
 
         }

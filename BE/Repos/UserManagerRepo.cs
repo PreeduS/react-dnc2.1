@@ -1,4 +1,5 @@
 
+using System.Security.Claims;
 using System.Threading.Tasks;
 using App.IRepos;
 using App.Models;
@@ -12,8 +13,10 @@ namespace App.Repos{
         private readonly SignInManager<ApplicationUser> SignInManager;
         public UserManagerRepo( UserManager<ApplicationUser> userManager, 
                                 SignInManager<ApplicationUser> signInManager){
-
+                UserManager = userManager;
+                SignInManager = signInManager;       
         }
+
 
         public async Task<IdentityResult> RegisterAsync(string username, string email, string password){
 
@@ -29,10 +32,7 @@ namespace App.Repos{
             return result;
         }
         public async Task<SignInResult> LoginAsync(string username, string password, bool rememberMe = false){
-            //on ctrl
-            /*if(User.Identity.IsAuthenticated){  //signInManager.IsSignedIn(User);
-                 return Content("Already logged in as: "+ User.Identity.Name);
-            }*/
+
             var result = await SignInManager.PasswordSignInAsync(username, password, rememberMe, lockoutOnFailure: false);
             return result;
 
@@ -48,5 +48,12 @@ namespace App.Repos{
             return await UserManager.FindByNameAsync(username) != null;
       
         }
+        public async Task<ApplicationUser> GetUserAsync(ClaimsPrincipal user){
+            return await UserManager.GetUserAsync(user);
+        }
+        public string GetUserId(ClaimsPrincipal user){
+            return UserManager.GetUserId(user);
+        }
+
     }
 }

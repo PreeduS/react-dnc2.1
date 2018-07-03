@@ -1,6 +1,8 @@
 CREATE TYPE return_type AS 
 ("Id" integer,"Content" TEXT, "ReplyTo" integer, "ThreadId" integer,
-"UserId" integer, "GroupId" integer, "NrReplies" integer, "UserName" varchar);
+"UserId" text, "GroupId" integer, "NrReplies" integer, "UserName" varchar);
+
+------- "UserId" text
 
 CREATE OR REPLACE FUNCTION getComments(ThreadId integer, lastCommentId integer DEFAULT NULL) 
 RETURNS SETOF return_type  AS $getComments$
@@ -21,25 +23,25 @@ commentQuery TEXT;
 
 BEGIN
 
-commentQuery := 'SELECT "Comments"."Id","Content","ReplyTo","ThreadId","UserId","GroupId",0 as "NrReplies", "AspNetUsers"."UserName" 
+commentQuery := 'SELECT "Comments"."Id" as "comment_id","Content","ReplyTo","ThreadId","UserId","GroupId",0 as "NrReplies", "AspNetUsers"."UserName" 
    FROM "Comments" 
 	INNER JOIN "AspNetUsers" ON "UserId" = "AspNetUsers"."Id" WHERE "ThreadId" = $1 AND "ReplyTo" is null';
 
 IF lastCommentId IS NOT NULL THEN
-commentQuery := commentQuery || ' AND "Comments"."Id"<' || lastCommentId;
+commentQuery := commentQuery || ' AND "comment_id"<' || lastCommentId;
 END IF;
 
 
-commentQuery := commentQuery || ' ORDER BY "Id" DESC LIMIT $2';
+commentQuery := commentQuery || ' ORDER BY "comment_id" DESC LIMIT $2';
 
 
 ----------main
    FOR commentR IN EXECUTE commentQuery USING ThreadId, commentsLimit
    LOOP
-	commentR."NrReplies" := (SELECT COUNT(Id) FROM "Comments" WHERE  "GroupId" = commentR.Id);
+	commentR."NrReplies" := (SELECT COUNT("Comments"."Id") FROM "Comments" WHERE  "GroupId" = commentR.comment_id);
 	return next commentR;
 		
-	FOR replyR IN replyCursor(commentR.Id, repliesLimit)
+	FOR replyR IN replyCursor(commentR.comment_id, repliesLimit)
 	LOOP
 		return NEXT replyR;
 	END LOOP;

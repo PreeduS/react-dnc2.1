@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
@@ -6,14 +7,18 @@ using System.Threading.Tasks;
 using App.IRepos;
 using App.Models;
 using App.Repos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Controllers{
     [Route("Thread")]
     public class ThreadController : Controller{
         private readonly ICommentRepo Repo;
-        public ThreadController(ICommentRepo r){
+        private readonly IUserManagerRepo UserManagerRepo;
+        public ThreadController(ICommentRepo r, IUserManagerRepo userManagerRepo){
             Repo = r;
+            UserManagerRepo = userManagerRepo;
         }
 
         [Route("")]
@@ -23,6 +28,10 @@ namespace App.Controllers{
 
         [Route("LoadComments/{ThreadId}")] 
         public async Task<IActionResult> LoadComments(int ThreadId){
+            if(ThreadId == 0) {
+                return BadRequest(new {Success = false, Errors = "Invalid arguments"} );
+            }
+
             IEnumerable<Comment> result =  await Repo.LoadCommentsAsync(ThreadId);
 
             return Json(result);
@@ -44,9 +53,12 @@ namespace App.Controllers{
 
 
         [Route("AddComment")]
+        [Authorize]
         public IActionResult AddComment(){
-
-            string UserId = "1"; //temp
+            
+            //string UserId = "439e896d-d4d4-4c3e-937c-cd45d6f63dfe"; //temp
+            string UserId = UserManagerRepo.GetUserId(User);
+            //string UserId = "1"; //temp
 
             Repo.Add( new Comment(){
                 Content = "Comment 4",
@@ -56,9 +68,12 @@ namespace App.Controllers{
                 UserId = UserId
             });
 
-            Repo.SaveChanges();
-
-            return Content("Test index");
+            try{
+                Repo.SaveChanges();
+            }catch(DbUpdateException e){
+                return BadRequest(e.InnerException.Message);
+            }
+            return Json(new {Success = true});
         }
 
         [Route("AddReply")]
