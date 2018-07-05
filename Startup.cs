@@ -13,9 +13,9 @@ using System.IO;
 using Microsoft.Extensions.Configuration;
 using App.Config;
 using Microsoft.AspNetCore.Identity;
+using App.Config.Extensions;
 
-namespace App
-{
+namespace App{
     public class Startup
     {
         public IConfiguration Configuration {get; set; }
@@ -25,8 +25,8 @@ namespace App
         public void ConfigureServices(IServiceCollection services){
 
             services.AddMvc(options => options.Conventions.Insert(0,new ModeRouteConvention()));
-
-
+            
+       
             if(false){
                 services.AddDbContext<AppDbContext>(option => option.UseSqlite(Configuration["db:connectionString"]) );
             }else{

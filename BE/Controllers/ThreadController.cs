@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Commons;
 using App.IRepos;
 using App.Models;
 using App.Repos;
@@ -40,14 +41,14 @@ namespace App.Controllers{
         [Route("LoadMoreComments")]
         public async Task<IActionResult> LoadMoreComments(LoadMoreCommentsRequestModel req){
             if(!ModelState.IsValid){
-                return BadRequest("Err validation");
+                return BadRequest(new {Errors = Validation.GetErrors(ModelState)} );
             }            
             int ThreadId = req.ThreadId;          
             int LastId = req.LastId;
 
             IEnumerable<Comment> result = await Repo.LoadMoreCommentsAsync(ThreadId, LastId);
             
-            return Content("");
+            return Ok();
         }
 
 
@@ -71,7 +72,7 @@ namespace App.Controllers{
             try{
                 Repo.SaveChanges();
             }catch(DbUpdateException e){
-                return BadRequest(e.InnerException.Message);
+                return BadRequest(new {Errors = e.InnerException.Message} );
             }
             return Json(new {Success = true});
         }
@@ -80,7 +81,7 @@ namespace App.Controllers{
         public IActionResult AddReply(/*[FromBody]*/ AddReplyRequestModel reply){
 
             if(!ModelState.IsValid){
-                return BadRequest("Err validation");
+                return BadRequest(new {Errors = Validation.GetErrors(ModelState)} );          
             }
 
             string ReplyContent = reply.Content;
@@ -90,12 +91,12 @@ namespace App.Controllers{
 
             var result = Repo.Find(c => c.Id == ReplyTo && c.ThreadId == ThreadId).FirstOrDefault();
             if(result == null){
-                return BadRequest("Err no reply");
+                return BadRequest(new {Errors = "No reply found"} );       
             }
             
             int ?GroupId = result.GroupId == null ? result.Id : result.GroupId;
             if(GroupId == null){
-                return BadRequest("Err no reply");
+                return BadRequest(new {Errors = "No reply found"} );     
             }
 
             Repo.Add( new Comment(){
@@ -107,9 +108,9 @@ namespace App.Controllers{
             });
 
             if( Repo.SaveChanges() > 0){
-                return Content("Reply Added");
+                return Ok("Reply Added");
             }
-            return Content("Error");
+            return BadRequest(new {Errors = ""} );     
 
         }
 

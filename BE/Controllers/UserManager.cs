@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Commons;
 using App.IRepos;
 using App.Models;
 using App.Repos;
@@ -18,22 +19,12 @@ namespace App.Controllers{
             Repo = r;
         }
 
-        private IEnumerable<object> GetValidationErrors(ModelStateDictionary modelState){
-                var errors = modelState.Values.Select(e => new {
-                    RawValue = e.RawValue,
-                    Errors = e.Errors.Select(e2 => new {
-                        Message = e2.ErrorMessage
-                    })
-                });
-                return errors;
-        }
-
 
         [Route("Register")]
         public async Task<IActionResult> Register(RegisterRequestModel user){
 
             if(!ModelState.IsValid){
-                return BadRequest(new {Success = false, Errors = GetValidationErrors(ModelState)} );
+                return BadRequest(new {Success = false, Errors = Validation.GetErrors(ModelState)} );
             }
 
             var result = await Repo.RegisterAsync(user.Username, user.Email, user.Password);
@@ -58,7 +49,7 @@ namespace App.Controllers{
             }
 
             if(!ModelState.IsValid){
-                return BadRequest(new {Success = false, Errors = GetValidationErrors(ModelState)} );
+                return BadRequest(new {Success = false, Errors = Validation.GetErrors(ModelState)} );
             }       
 
             var result = await Repo.LoginAsync(user.Username, user.Password);

@@ -13,8 +13,8 @@ namespace App.Config{
             application.Controllers?.ToList().ForEach( controller => {
                 var routeSelectors = controller.Selectors.Where(x => x.AttributeRouteModel != null);
 
-                routeSelectors?.ToList().ForEach( sel => Console.WriteLine("sel "+ sel.AttributeRouteModel.Name));
-                Console.WriteLine("---------");
+                //routeSelectors?.ToList().ForEach( sel => Console.WriteLine("sel "+ sel.AttributeRouteModel.Name));
+                //Console.WriteLine("---------");
                 routeSelectors?.ToList().ForEach( sel => 
                     sel.AttributeRouteModel = 
                         AttributeRouteModel.CombineAttributeRouteModel(globalPrefix, sel.AttributeRouteModel)
