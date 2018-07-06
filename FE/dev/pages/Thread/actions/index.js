@@ -84,7 +84,7 @@ export const loadMoreReplies = (threadId, commentGroupId, lastReplyId) => dispat
 //addComment & addReply - similar
 
 export const addComment = comment => dispatch =>{
-    console.log('comment : ',comment)
+
     dispatch( {type: actionTypes.addComment + '_PENDING'} );
     const {threadId, content} = comment;
 

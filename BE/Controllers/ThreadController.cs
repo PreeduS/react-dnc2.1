@@ -27,13 +27,13 @@ namespace App.Controllers{
             return Content("Template index");
         }
 
-        [Route("LoadComments/{ThreadId}")] 
+        [Route("LoadComments")] 
         public async Task<IActionResult> LoadComments(int ThreadId){
             if(ThreadId == 0) {
                 return BadRequest(new {Success = false, Errors = "Invalid arguments"} );
             }
 
-            IEnumerable<Comment> result =  await Repo.LoadCommentsAsync(ThreadId);
+            IEnumerable<CommentViewModel> result =  await Repo.LoadCommentsAsync(ThreadId);
 
             return Json(result);
         }
@@ -46,9 +46,9 @@ namespace App.Controllers{
             int ThreadId = req.ThreadId;          
             int LastId = req.LastId;
 
-            IEnumerable<Comment> result = await Repo.LoadMoreCommentsAsync(ThreadId, LastId);
+            IEnumerable<CommentViewModel> result = await Repo.LoadMoreCommentsAsync(ThreadId, LastId);
             
-            return Ok();
+            return Json(result);
         }
 
 
@@ -78,7 +78,7 @@ namespace App.Controllers{
         }
 
         [Route("AddReply")]
-        public IActionResult AddReply(/*[FromBody]*/ AddReplyRequestModel reply){
+        public IActionResult AddReply([FromBody] AddReplyRequestModel reply){
 
             if(!ModelState.IsValid){
                 return BadRequest(new {Errors = Validation.GetErrors(ModelState)} );          
@@ -87,7 +87,8 @@ namespace App.Controllers{
             string ReplyContent = reply.Content;
             int ReplyTo = reply.ReplyTo;
             int ThreadId = reply.ThreadId;
-            string UserId = "1"; //temp
+            //string UserId = "1"; //temp
+            string UserId = "439e896d-d4d4-4c3e-937c-cd45d6f63dfe";
 
             var result = Repo.Find(c => c.Id == ReplyTo && c.ThreadId == ThreadId).FirstOrDefault();
             if(result == null){
@@ -108,7 +109,7 @@ namespace App.Controllers{
             });
 
             if( Repo.SaveChanges() > 0){
-                return Ok("Reply Added");
+                return Json(new {Success = true});
             }
             return BadRequest(new {Errors = ""} );     
 

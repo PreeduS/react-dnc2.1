@@ -2,7 +2,10 @@ import axios from 'axios';
 
 const services = {
     loadComments: threadId =>
-        axios.get('/api/thread/getall',{threadId})
+        //axios.get('/api/thread/LoadComments',{threadId})
+        axios.get('/api/thread/LoadComments',{
+            params: {threadId}
+        })
     ,
     loadMoreComments: (threadId, lastId) =>
         axios.get('/api/thread/loadMoreComments',{

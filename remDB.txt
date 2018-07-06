@@ -28,11 +28,11 @@ commentQuery := 'SELECT "Comments"."Id" as "comment_id","Content","ReplyTo","Thr
 	INNER JOIN "AspNetUsers" ON "UserId" = "AspNetUsers"."Id" WHERE "ThreadId" = $1 AND "ReplyTo" is null';
 
 IF lastCommentId IS NOT NULL THEN
-commentQuery := commentQuery || ' AND "comment_id"<' || lastCommentId;
+commentQuery := commentQuery || ' AND "Comments"."Id" <' || lastCommentId;
 END IF;
 
 
-commentQuery := commentQuery || ' ORDER BY "comment_id" DESC LIMIT $2';
+commentQuery := commentQuery || ' ORDER BY "Comments"."Id" DESC LIMIT $2';
 
 
 ----------main

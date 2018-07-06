@@ -36,22 +36,22 @@ namespace App.Repos{
             Console.WriteLine(resultVModel);
             return resultVModel;
         }
-        public async Task<IEnumerable<Comment>> LoadCommentsAsync(int ThreadId){
+        public async Task<IEnumerable<CommentViewModel>> LoadCommentsAsync(int ThreadId){
             var result = await Context.Set<Comment>()
                 .FromSql("SELECT * from getComments({0})", ThreadId).ToListAsync();
 
-            //List<CommentViewModel> resultVModel = MapComments(result);
+            List<CommentViewModel> resultVModel = MapComments(result);
 
-            return result;
+            return resultVModel;
         }
         //LoadMoreComments
-        public async Task<IEnumerable<Comment>> LoadMoreCommentsAsync( int ThreadId, int LastId){
+        public async Task<IEnumerable<CommentViewModel>> LoadMoreCommentsAsync( int ThreadId, int LastId){
             var result = await Context.Set<Comment>()
                 .FromSql("SELECT * from getComments({0},{1})", ThreadId, LastId).ToListAsync();
 
-            //List<CommentViewModel> resultVModel = MapComments(result);
+            List<CommentViewModel> resultVModel = MapComments(result);
 
-            return result;
+            return resultVModel;
         }
         
     }

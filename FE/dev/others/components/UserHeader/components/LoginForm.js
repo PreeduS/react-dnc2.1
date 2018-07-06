@@ -36,7 +36,8 @@ class LoginForm extends React.Component{
             this.props.isPending(false);
             this.setState({
                 pending: false,
-                status: error.response.data.error,
+                //status: error.response.data.error,
+                status: 'err'
             });
         });
 
@@ -50,6 +51,7 @@ class LoginForm extends React.Component{
 
     render(){
         const {username, password, status} = this.state;
+        console.log('status ',status);
         return(
             <div>
 
@@ -70,7 +72,7 @@ class LoginForm extends React.Component{
                     value = {password}
                 />
 
-                {status}
+                {'status' || status}
                 <br />
                 <button disabled = {this.state.pending} onClick = {this.login}>Login</button>
             </div>

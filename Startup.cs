@@ -58,7 +58,7 @@ namespace App{
             services.ConfigureApplicationCookie(options => {
                 options.ExpireTimeSpan = TimeSpan.FromDays(14);
                 options.Cookie.Expiration = TimeSpan.FromDays(14);
-                //options.LoginPath = "/path/path";
+                options.LoginPath = "/api/App/Login";
             });
 
 
@@ -81,9 +81,19 @@ namespace App{
             app.UseMvc();
             app.UseMvc(routes =>{
                     routes.MapRoute( 
+                        name: "login-route-be", 
+                        template: "api/App/login",
+                        defaults: new { controller = "App", action = "Login" }
+                    );                
+                    routes.MapRoute( 
+                        name: "fallback-route-be", 
+                        template: "api/{*url}",
+                        defaults: new { controller = "App", action = "BeFallback" }
+                    );                
+                    routes.MapRoute( 
                         name: "fallback-route-fe", 
                         template: "{*url}",
-                        defaults: new { controller = "app", action = "index" }
+                        defaults: new { controller = "App", action = "FeFallback" }
                     );                                         
                 }
             );
