@@ -29,8 +29,24 @@ class Comments extends React.Component {
         const commentsData = this.props.comments.data;
 
         const threadId = 1; //temp ----------------
-        const lastId = commentsData[commentsData.length-1].id;
-        console.log('loadMoreComments ',lastId)
+        //const lastId = commentsData[commentsData.length-1].id;   //edit lastId that is not recent (status)
+
+
+        //this.props.comments.status.comments && this.props.comments.status.comments[id].status !== 'recent'
+        let commentsDataReverse = [...commentsData].reverse();
+        let lastComment = commentsDataReverse.find(c =>{
+            let commentId = c.id;
+            if(
+                this.props.comments.status.comments && 
+                this.props.comments.status.comments[commentId] && 
+                this.props.comments.status.comments[commentId].status !== 'recent'
+            ){return true;}
+            return false;
+        });
+
+        let lastId = lastComment.id;
+
+ 
         this.props.loadMoreComments(threadId, lastId)
     }
 
@@ -42,7 +58,8 @@ class Comments extends React.Component {
 
     render() {
         const commentsData = this.props.comments.data;
-        const isPending = this.props.comments.status.loadMoreComments.status === 'pending'
+        const isPending = this.props.comments.status.loadMoreComments.status === 'pending';
+        const isDisabled = this.props.comments.status.loadMoreComments.status === 'done';
 
         return (
             <styles.CommentsWrapper>
@@ -62,7 +79,11 @@ class Comments extends React.Component {
                     />
                 )}
 
-                <LoadMoreComments loading = {isPending} onClick = {this.loadMoreComments}/>
+                <LoadMoreComments 
+                    loading = {isPending} 
+                    disabled = {isDisabled} 
+                    onClick = {this.loadMoreComments}
+                />
             </styles.CommentsWrapper>
         );
 

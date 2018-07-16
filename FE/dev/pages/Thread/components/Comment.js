@@ -22,8 +22,9 @@ class Comment extends React.Component {
         this.props.toggleActiveTextarea(this.props.id);
     }
 
-    addNewReply(content){
-        const {id, threadId} = this.props;
+    addNewReply(content){   console.log('here')
+        const {id} = this.props;
+        let threadId = 1; //temp
         const reply = {replyTo: id, content, threadId};
 
         this.props.addReply(reply);
@@ -41,7 +42,7 @@ class Comment extends React.Component {
         var isVisible = (this.props.activeTextarea[this.props.id] !== undefined && this.props.activeTextarea[this.props.id].active);
 
 
-        const tempc = ` | id: ${id} ---
+        const tempc = ` | id: ${id} --- Comment: 
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
         Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur	`;

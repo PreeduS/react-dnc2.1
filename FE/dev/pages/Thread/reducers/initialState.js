@@ -1,5 +1,5 @@
 const initialState = {
-    comments:{
+    commentsReducer:{
         data:[],
         pending: false,  //pending overall
         //pending:{
@@ -8,7 +8,6 @@ const initialState = {
         //status:{}  //comments/replies/commentGroup status
         status:{
             loadMoreComments: {
-                //pending: false,
                 status: null
             },
             comments:{}     //comments/replies/commentGroup status
@@ -16,7 +15,7 @@ const initialState = {
         },
         activeTextarea: {}  //{active}
     },
-    thread:{}
+    threadReducer:{}
 }
 export default initialState;
 

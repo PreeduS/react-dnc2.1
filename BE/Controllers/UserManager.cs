@@ -43,7 +43,6 @@ namespace App.Controllers{
         }
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody]LoginRequestModel user){
-
             if(User.Identity.IsAuthenticated){  //signInManager.IsSignedIn(User);
                  return BadRequest(new {Success = false, Errors = "Already logged in as: "+ User.Identity.Name});
             }

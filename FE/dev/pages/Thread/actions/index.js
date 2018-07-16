@@ -44,9 +44,11 @@ export const loadMoreComments = (threadId, lastId) => dispatch => {
     dispatch( {type: actionTypes.loadMoreComments + '_PENDING'} );
 
     services.loadMoreComments(threadId, lastId).then( result =>{
+        let commentsData = result.data;
+
         dispatch({
             type: actionTypes.loadMoreComments + '_FULFILLED',
-            payload: result.data
+            payload: commentsData
         });
 
     }).catch( generalError(actionTypes.loadMoreComments)(dispatch) )

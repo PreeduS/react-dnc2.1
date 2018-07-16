@@ -13,8 +13,9 @@ const addReply = (stateData, reply) => {
         ...newStateData[commentIndex]
     }
 
-    newStateData[commentIndex].replies = (newStateData[commentIndex].replies === undefined) ?
-    [reply] : [ ...newStateData[commentIndex].replies, reply];
+    let prevReplies = newStateData[commentIndex].replies;
+    newStateData[commentIndex].replies = (prevReplies === undefined) ?
+        [reply] : [ ...prevReplies, reply];
 
     return newStateData;
 }
@@ -29,9 +30,10 @@ const loadMoreReplies = (stateData, newReplies , commentGroupId) =>{
         ...newStateData[commentIndex]
     }
 
-    newStateData[commentIndex].replies = (newStateData[commentIndex].replies === undefined) ?
+    let prevReplies = newStateData[commentIndex].replies;
+    newStateData[commentIndex].replies = (prevReplies === undefined) ?
     newReplies : [
-        ...newStateData[commentIndex].replies,
+        ...prevReplies,
         ...newReplies
     ];
 
@@ -48,6 +50,7 @@ const getUpdatedStatusComment = ({stateComments, commentId, newStatus, textareaV
             status: newStatus
         }
     };
+    //used only to clear value on success
     if(textareaValue !== null){
         state[commentId].value = textareaValue;
     }
@@ -88,7 +91,7 @@ const toggleActiveTextarea = id => state =>{
 }
 
 //reducer
-const CommentsReducer =( state = initialState.comments, action) =>{
+const CommentsReducer =( state = initialState.commentsReducer, action) =>{
 
     switch(action.type) {
         //addComment
@@ -159,14 +162,18 @@ const CommentsReducer =( state = initialState.comments, action) =>{
                 }
             };
         }
-        case actionTypes.loadMoreComments + '_FULFILLED':
+        case actionTypes.loadMoreComments + '_FULFILLED':{
+            let status = null; 
+            if(action.payload.length === 0){
+                status = 'done'; //no more comments
+            }
             return{
                 ...state,
                 status:{
                     ...state.status,
                     loadMoreComments: {
                         ...state.status.loadMoreComments,
-                        status: null
+                        status
                     }
                 },
                 data:[
@@ -174,6 +181,7 @@ const CommentsReducer =( state = initialState.comments, action) =>{
                     ...action.payload
                 ]
             };
+        }
         case actionTypes.loadMoreComments + '_REJECTED':
             return{
                 ...state,

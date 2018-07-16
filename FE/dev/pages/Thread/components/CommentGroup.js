@@ -23,7 +23,23 @@ class CommentGroup extends React.Component {
         const hasReplies = replies !== undefined;
         let lastReplyId = null;
         if(hasReplies){
-            lastReplyId = replies[replies.length-1].id;
+            //lastReplyId = replies[replies.length-1].id;     //edit lastReplyId that is not recent (status)
+
+
+            let repliesReverse = [...replies].reverse();
+            let lastReply = repliesReverse.find(r =>{
+                let replyId = r.id;
+                let statusComments = this.props.comments.status.comments;
+                if(
+                    (statusComments && statusComments[replyId] === undefined) ||
+                    (statusComments && statusComments[replyId] && statusComments[replyId].status !== 'recent' )
+
+                ){return true;}
+                return false;
+            });
+    
+            lastReplyId = lastReply.id;
+   
         }
         console.log('loadMoreReplies ',id, replies, lastReplyId)
         const threadId = 1;

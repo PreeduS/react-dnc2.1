@@ -16,18 +16,18 @@ class UserSection extends React.Component {
         super();
         this.state = {
             showDropdown:false,
-            preventClose: false
+            isPending: false
         }
         this.dropdownButtonContainerRef = React.createRef(); 
 
-        this.toogleDropdown = this.toogleDropdown.bind(this);
+        this.toggleDropdown = this.toggleDropdown.bind(this);
         this.dropdownBlur = this.dropdownBlur.bind(this);
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
         this.isPendingHandler = this.isPendingHandler.bind(this);
     }
-    toogleDropdown(){
-        if(this.state.preventClose){return;}
+    toggleDropdown(){
+        if(this.state.isPending){return;}
         this.setState({showDropdown: !this.state.showDropdown});
     }
     dropdownBlur(e){
@@ -44,13 +44,12 @@ class UserSection extends React.Component {
         const {logout} = this.props;
         logout();
     }
-    isPendingHandler(isPending){
-        this.setState({preventClose: isPending})
-
+    isPendingHandler(isPending){   
+        this.setState({isPending});
     }
 
     render(){
-        const {showDropdown, preventClose} = this.state;
+        const {showDropdown, isPending} = this.state;
         const {username} = this.props.user;
         const loggedIn = username !== null;
 
@@ -58,15 +57,24 @@ class UserSection extends React.Component {
             <div className ={styles.userSection}>
                 <div className = {styles.leftContent}></div>
                 <div className = {styles.rightContent} ref = {this.dropdownButtonContainerRef}>
-                    <div onClick = {this.toogleDropdown}>{username || 'Login'}</div>
-                    <div onClick = {this.toogleDropdown}>&#9662;</div>
+                    <div onClick = {this.toggleDropdown}>{username || 'Login'}</div>
+                    <div onClick = {this.toggleDropdown}>&#9662;</div>
 
                     {loggedIn && <div onClick = {this.logout}>logout</div>}
 
                 </div>
                 <div className = {styles.dropDownContainer}>
-                    <Dropdown showDropdown = {showDropdown} onDropdownBlur = {this.dropdownBlur} preventClose = {preventClose}>
-                        {!loggedIn && <LoginForm login = {this.login} isPending = {this.isPendingHandler}/>}
+                    <Dropdown 
+                        showDropdown = {showDropdown} 
+                        onDropdownBlur = {this.dropdownBlur} 
+                        preventClose = {isPending}
+                    >
+                        {!loggedIn && 
+                            <LoginForm 
+                                login = {this.login} 
+                                isPendingHandler = {this.isPendingHandler}
+                                isPending = {isPending}
+                        />}
                     </Dropdown>
                 </div>
             </div>

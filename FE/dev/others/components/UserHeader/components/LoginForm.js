@@ -14,30 +14,26 @@ class LoginForm extends React.Component{
         this.state = {
             username:'',
             password:'',
-            pending: false,
             status:''
         }
     }
 
     login(){
-        this.setState({pending:true});
+        this.setState({status:''});
         const {username, password} = this.state;
-        const {login} = this.props;
-        this.props.isPending(true);
+        const {login, isPendingHandler} = this.props;
+        
+        isPendingHandler(true);    
         services.login(username, password).then( result =>{
-            console.log(result.data);
-            this.props.isPending(false);
+            isPendingHandler(false); 
             this.setState({
-                pending:false,
-                status: result.data
+                status: 'Logged in successfully'
             });
             login(username);
-        }).catch(error => {
-            this.props.isPending(false);
+        }).catch(err => {
+            isPendingHandler(false);   
             this.setState({
-                pending: false,
-                //status: error.response.data.error,
-                status: 'err'
+                status: 'Wrong username of password'
             });
         });
 
@@ -51,7 +47,6 @@ class LoginForm extends React.Component{
 
     render(){
         const {username, password, status} = this.state;
-        console.log('status ',status);
         return(
             <div>
 
@@ -72,9 +67,9 @@ class LoginForm extends React.Component{
                     value = {password}
                 />
 
-                {'status' || status}
+                {status}
                 <br />
-                <button disabled = {this.state.pending} onClick = {this.login}>Login</button>
+                <button disabled = {this.props.isPending} onClick = {this.login}>Login</button>
             </div>
         );
     }

@@ -12,9 +12,9 @@ namespace App.RequestModels{
         public string Email { get; set; }
     }
     public class LoginRequestModel{
-        [Required]
+        [Required, MinLength(6, ErrorMessage = "Username must be at least 6 characters")]
         public string Username { get; set; }
-        [Required]
+        [Required,  MinLength(6) ]
         public string Password { get; set; }
 
     }

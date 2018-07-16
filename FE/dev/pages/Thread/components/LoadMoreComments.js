@@ -11,14 +11,14 @@ class LoadMoreComments extends React.Component {
 
 
     render(){
-        const {loading, onClick} = this.props;
+        const {loading, disabled, onClick} = this.props;
         return(
             <div>
                 <styles.LoadMoreCommentsWrapper>
 
                     <Button
                         onClick = {onClick}
-                        disabled = {loading}
+                        disabled = {loading || disabled}
                         loading = {loading}
                         width = {'100%'}
                         height = {30}

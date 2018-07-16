@@ -100,16 +100,21 @@ namespace App.Controllers{
                 return BadRequest(new {Errors = "No reply found"} );     
             }
 
-            Repo.Add( new Comment(){
+            var NewReply = new Comment(){
                 Content = ReplyContent,
                 ReplyTo = ReplyTo,
                 GroupId = GroupId,
                 ThreadId = 1,
                 UserId = UserId              
-            });
+            };
+
+
+            Repo.Add(NewReply);
 
             if( Repo.SaveChanges() > 0){
-                return Json(new {Success = true});
+                //return Json(new {Success = true});
+                return Json(NewReply);
+    
             }
             return BadRequest(new {Errors = ""} );     
 
