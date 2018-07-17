@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using App.IRepos;
 using App.Models;
+using App.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,14 +23,21 @@ namespace App.Repos{
             .Select( x => new CommentViewModel{
                 Id = x.Id,
                 Content = x.Content,
-                Replies = new List<Comment>(){}
+                //Replies = new List<Comment>(){}
+                Replies = new List<ReplyViewModel>(){}
 
             }).ToList();
 
             result.Where(x => x.GroupId != null).GroupBy(x => x.GroupId).ToList().ForEach(x => {
                 Console.WriteLine(x.Key);
-                var RepliesToAdd = result.Where(y => y.GroupId == x.Key).ToList(); 
-                  Console.WriteLine("c "+RepliesToAdd.Count);
+                var RepliesToAdd = result.Where(y => y.GroupId == x.Key).Select(r => new ReplyViewModel{
+                    Id = r.Id,
+                    Content = r.Content,
+                    ReplyTo = r.ReplyTo,
+                    GroupId = r.GroupId,
+                    ThreadId = r.ThreadId,
+                }).ToList(); 
+
                 resultVModel.Find(r => r.Id == x.Key).Replies.AddRange(RepliesToAdd);
             });
             
@@ -56,14 +64,6 @@ namespace App.Repos{
         
     }
 
-        public class CommentViewModel{
-            public int Id { get; set; }
-            public string Content { get; set; }
-            public int ReplyTo { get; set; }
-            public int ?GroupId { get; set; }
-            public int ThreadId { get; set; }
-            //public int UserId { get; set; } //fk
-            public List<Comment> Replies{ get; set; }
-        }
+
 
 }

@@ -1,2 +1,3 @@
 /FE/node_modules
 /FE/build
+/obj/Debug/netcoreapp2.1/App.assets.cache
