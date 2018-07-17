@@ -8,6 +8,12 @@ const initialState = {
         mainTextarea: {
             status: null,
             value: ''
+        },
+        textarea:{
+            '-1': {
+                status: null,
+                value: '' 
+            }
         }
 
 
