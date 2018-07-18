@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 //actions
-import {loadComments } from './actions';
+import {loadComments } from './actions/comments';
 
 import Comments from './containers/Comments';
 import Content from './components/Content';
@@ -18,10 +18,12 @@ class Thread extends React.Component {
         this.props.loadComments(threadId);
     }
     render() {
+        const {comments} = this.props;
+        const isLoading = Object.keys(comments.data).length > 0;
         return (
             <styles.ThreadWrapper>
                 <Content />
-                <CommentsHoc loading = {this.props.comments.data.length === 0} />
+                <CommentsHoc loading = {isLoading} />
             </styles.ThreadWrapper>
         );
     }
@@ -29,11 +31,11 @@ class Thread extends React.Component {
 
 
 const mapStateToProps = state =>( {
-    comments: state.CommentsReducer
+    comments: state.CommentsReducer.comments
 });
 const mapDispatchToProps = dispatch => ({
     loadComments: threadId =>
-        dispatch(()=> loadComments(threadId)(dispatch))
+        dispatch(() => loadComments(threadId)(dispatch))
 
 });
 

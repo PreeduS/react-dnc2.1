@@ -1,4 +1,4 @@
-import ThreadComponent from '../pages/Thread';
+import ThreadComponent from '../pages/Thread2';
 import ThreadsComponent from '../pages/Threads';
 import RegisterComponent from '../pages/Register';
 import UsersComponent from '../pages/Users';

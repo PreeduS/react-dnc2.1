@@ -4,8 +4,17 @@ import {requestStatus} from '~/commons/constants';
 import {commentStatus, textareaStatus, loaderStatus} from '../constants';
 import check from '~/commons/utils/check';
 import initialState from './initialState';
-export default CommentsReducer;
 
+//map array to object
+const mapComments = comments =>( 
+    comments.reduce( (acc, el) => {
+        const {id, ...rest} = el;
+        return {
+            ...acc,
+            [id]: rest
+        }
+    },{})
+);
 
 const addComment = (commentsDataState, comment) => {
     let id = comment.id;
@@ -55,9 +64,11 @@ const addReply = (commentsDataState, reply) => {
 
 //loadComments,loadMoreComments
 const loadMoreComments = (commentsDataState, comments) => {
+    const commentsObject = mapComments(comments);
+
     return {
         ...commentsDataState,
-        ...comments        
+        ...commentsObject        
     };
 }
 
@@ -65,8 +76,8 @@ const loadMoreReplies = (commentsDataState, newReplies, commentGroupId) => {
     if(commentsDataState[commentGroupId] === undefined){
         throw new Error('Failed to find commentgroup id: '+ commentGroupId);
     }  
-    let prevReplies = newCommentsDataState[groupId].replies === undefined ? {} : newCommentsDataState[groupId].replies;
-
+    const prevReplies = newCommentsDataState[groupId].replies === undefined ? {} : newCommentsDataState[groupId].replies;
+    const newRepliesObject = mapComments(newReplies);
     //newReplies - add foreach -> status: commentStatus.recent
 
     let newCommentsDataState = {
@@ -75,7 +86,7 @@ const loadMoreReplies = (commentsDataState, newReplies, commentGroupId) => {
             ...newCommentsDataState[groupId],
             replies:{
                 ...prevReplies,
-                ...newReplies
+                ...newRepliesObject
             }
 
         }

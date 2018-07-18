@@ -3,7 +3,7 @@ import commonTypes from '~/commons/actionTypes';
 import {generalError} from './commons';
 import {updateTextarea} from './index';
 import {commentStatus, textareaStatus} from '../constants';
-
+import services from '../services';
 
 const setTextarea = (id, status) => dispatch => {
     if(status === textareaStatus.pending){

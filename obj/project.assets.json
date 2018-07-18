@@ -8679,7 +8679,7 @@
       ]
     },
     "System.Interactive.Async/3.1.1": {
-      "sha512": "hZccYiIE5RS1/J9Tb/BNtosAGVggdlsJm4Ojdu+gDV0p4AIi+LUfUogMKkRacljQEJd2AG6vYzvcjhQFkqoZmw==",
+      "sha512": "CRd+8T1QsDCWKsNCOBNk2qun+J4yj0WsiJmyFEzuhbsL9096rxsvCB1Wt0hRSdZiycsqVpE+zk3/gmvk3O8GFQ==",
       "type": "package",
       "path": "system.interactive.async/3.1.1",
       "files": [
@@ -9090,7 +9090,7 @@
       ]
     },
     "System.Linq.Queryable/4.0.1": {
-      "sha512": "Yn/WfYe9RoRfmSLvUt2JerP0BTGGykCZkQPgojaxgzF2N0oPo+/AhB8TXOpdCcNlrG3VRtsamtK2uzsp3cqRVw==",
+      "sha512": "4jMPG0QE+70fSX2n9GJk1FWzmgAEoT23ONPwNgoXs9by2CTVPnYZzacSfU+ei/Jg+XkvtX0P33GcDfSWc8W0Ew==",
       "type": "package",
       "path": "system.linq.queryable/4.0.1",
       "files": [
@@ -11913,23 +11913,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\laurentiu.tamasila\\.nuget\\packages\\": {},
+    "C:\\Users\\Marian\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\laurentiu.tamasila\\Desktop\\react-dnc2\\App.csproj",
+      "projectUniqueName": "D:\\C# projects\\react-dnc2.1\\App\\App.csproj",
       "projectName": "App",
-      "projectPath": "c:\\Users\\laurentiu.tamasila\\Desktop\\react-dnc2\\App.csproj",
-      "packagesPath": "C:\\Users\\laurentiu.tamasila\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\laurentiu.tamasila\\Desktop\\react-dnc2\\obj\\",
+      "projectPath": "D:\\C# projects\\react-dnc2.1\\App\\App.csproj",
+      "packagesPath": "C:\\Users\\Marian\\.nuget\\packages\\",
+      "outputPath": "D:\\C# projects\\react-dnc2.1\\App\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\laurentiu.tamasila\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Marian\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -11937,9 +11937,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "http://10.0.213.20/nuget": {},
-        "http://nexus/repository/HaifaNuget": {},
-        "http://wilbuild1.online.greenfieldnet.com:8080/guestAuth/app/nuget/v1/FeedService.svc": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

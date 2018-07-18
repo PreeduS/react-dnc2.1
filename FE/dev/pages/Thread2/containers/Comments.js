@@ -2,12 +2,12 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import CommentsReducer from '../reducers/CommentsReducer'
-import ThreadReducer from '../reducers/ThreadReducer'
+//import ThreadReducer from '../reducers/ThreadReducer'
 import {addComment, updateTextarea, loadMoreComments } from '../actions';
 
 import CommentGroup from '../components/CommentGroup';
 import CommentTextArea from '../components/CommentTextArea';
-import LoadMoreComments from '../components/LoadMoreComments';
+//import LoadMoreComments from '../components/LoadMoreComments';
 
 import * as styles from '../styles/Comments.js';
 
@@ -26,37 +26,60 @@ class Comments extends React.Component {
         this.props.addComment(comment);
     }
     loadMoreComments(){
-        const commentsData = this.props.comments.data;
-        const commentsDataReverse = [...commentsData].reverse();
-        const threadId = 1; //temp ----------------
-        let lastComment = commentsDataReverse.find(c =>{
-            let commentId = c.id;
-            if(
-                this.props.comments.status.comments && 
-                this.props.comments.status.comments[commentId] && 
-                this.props.comments.status.comments[commentId].status !== 'recent'
-            ){return true;}
+        const {comments} = this.props;
+        const commentsData = comments.data;
+        const commentsKeys = Object.keys(commentsData);
+
+        const lastId = commentsKeys.reverse().find( id => {
+            if( commentsData[id] && commentsData[id].status !== 'recent'){ return true; }
             return false;
         });
 
-        let lastId = lastComment.id;
-
- 
+        const threadId = 1; //temp ----------------
         this.props.loadMoreComments(threadId, lastId)
     }
 
 
     changeHandler(el){
-        const id = -1;
-        this.props.updateTextarea(id, el.target.value)
+        //this.props.updateTextarea(id, el.target.value);//edit
+        this.props.updateTextarea({
+            id: -1, 
+            value: el.target.value, 
+            status: null, 
+            isActive: null
+        });
     }
 
     render() {
-        const commentsData = this.props.comments.data;
-        const isPending = this.props.comments.status.loadMoreComments.status === 'pending';
-        const isDisabled = this.props.comments.status.loadMoreComments.status === 'done';
+        //const isPending = this.props.comments.status.loadMoreComments.status === 'pending';
+        //const isDisabled = this.props.comments.status.loadMoreComments.status === 'done';
 
+        const {comments} = this.props;
+        const commentsData = comments.data;
+        const commentsKeys = Object.keys(commentsData);
         return (
+            <styles.CommentsWrapper>
+                <CommentTextArea
+                    id = {-1}
+                    addCommentOrReply = {this.addNewComment}
+                    isVisible = {true}
+                    onChange = {this.changeHandler}
+                />
+                <br />                
+                {commentsKeys.length > 0 && commentsKeys.map( key => {
+                    let comment = commentsData[key];
+                    return(
+                        <CommentGroup
+                            key = {key}
+                            comment = {comment}
+                            addNewComment = {this.addNewComment}
+                        />
+                    );
+                })
+                }                
+            </styles.CommentsWrapper>
+        );
+       /* return (
             <styles.CommentsWrapper>
                 <CommentTextArea
                     id = {-1}
@@ -81,14 +104,14 @@ class Comments extends React.Component {
                 />
             </styles.CommentsWrapper>
         );
-
+*/
     }
 }
 
 
 
 const mapStateToProps = state =>( {
-    comments: state.CommentsReducer,
+    comments: state.CommentsReducer.comments,
     thread: state.ThreadReducer
 });
 const mapDispatchToProps = dispatch => ({

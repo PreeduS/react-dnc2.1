@@ -1,7 +1,7 @@
 const initialState = {
     commentsReducer:{
-
-        comments = {
+        
+        comments: {
             data: {},
             status: null
         },
