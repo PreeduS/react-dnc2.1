@@ -72,12 +72,12 @@ const loadMoreComments = (commentsDataState, comments) => {
     };
 }
 
-const loadMoreReplies = (commentsDataState, newReplies, commentGroupId) => {
-    if(commentsDataState[commentGroupId] === undefined){
-        throw new Error('Failed to find commentgroup id: '+ commentGroupId);
+const loadMoreReplies = (commentsDataState, newReplies, groupId) => {
+    if(commentsDataState[groupId] === undefined){
+        throw new Error('Failed to find commentgroup id: '+ groupId);
     }  
     const prevReplies = newCommentsDataState[groupId].replies === undefined ? {} : newCommentsDataState[groupId].replies;
-    const newRepliesObject = mapComments(newReplies);
+    let newRepliesObject = mapComments(newReplies);
     //newReplies - add foreach -> status: commentStatus.recent
 
     let newCommentsDataState = {
@@ -87,7 +87,8 @@ const loadMoreReplies = (commentsDataState, newReplies, commentGroupId) => {
             replies:{
                 ...prevReplies,
                 ...newRepliesObject
-            }
+            },
+            loaderStatus: loaderStatus.pending
 
         }
     }
@@ -163,7 +164,7 @@ const CommentsReducer = ( state = initialState.commentsReducer, action) =>{
                 ...state,
                 comments:{
                     ...state.comments,
-                    status: loaderStatus.pending
+                    loaderStatus: loaderStatus.pending
                 }
             };
         }
@@ -173,7 +174,7 @@ const CommentsReducer = ( state = initialState.commentsReducer, action) =>{
                 ...state,
                 comments:{ 
                     data: loadMoreComments(state.comments.data, comments),
-                    status: loaderStatus.fulfilled  //if comments are empty -> status:'done'
+                    loaderStatus: loaderStatus.fulfilled  //if comments are empty -> status:'done'
                 }
             };
         }
@@ -182,7 +183,7 @@ const CommentsReducer = ( state = initialState.commentsReducer, action) =>{
                 ...state,
                 comments:{
                     ...state.comments,
-                    status: loaderStatus.rejected
+                    loaderStatus: loaderStatus.rejected
                 }
             };
         }
@@ -192,7 +193,7 @@ const CommentsReducer = ( state = initialState.commentsReducer, action) =>{
                 ...state,
                 comments:{
                     ...state.comments,
-                    status: loaderStatus.pending
+                    loaderStatus: loaderStatus.pending
                 }
             };
         }
@@ -202,7 +203,7 @@ const CommentsReducer = ( state = initialState.commentsReducer, action) =>{
                 ...state,
                 comments:{ 
                     data: loadMoreComments(state.comments.data, comments),
-                    status: loaderStatus.fulfilled      //if comments are empty -> status:'done'
+                    loaderStatus: loaderStatus.fulfilled      //if comments are empty -> status:'done'
                 }
             };            
         }
@@ -211,18 +212,26 @@ const CommentsReducer = ( state = initialState.commentsReducer, action) =>{
                 ...state,
                 comments:{
                     ...state.comments,
-                    status: loaderStatus.rejected
+                    loaderStatus: loaderStatus.rejected
                 }
             };
         }
 
         //loadMoreReplies
         case actionTypes.loadMoreReplies + commonTypes.status.pending:{
+            let {commentGroupId} = action.payload;
             return {
                 ...state,
                 comments:{
                     ...state.comments,
-                    status: loaderStatus.pending
+                    data:{
+                        ...state.comments.data,
+                        [commentGroupId] : {
+                            ...state.comments.data[commentGroupId],
+                            loaderStatus: loaderStatus.pending
+                        }
+                    }
+                    //status: loaderStatus.pending
                 }
             };
         }
@@ -234,16 +243,24 @@ const CommentsReducer = ( state = initialState.commentsReducer, action) =>{
                 comments:{
                     ...state.comments,
                     data: loadMoreReplies(state.comments.data, replies, commentGroupId),
-                    status: requestStatus.fulfilled
+                    //status: requestStatus.fulfilled
                 }
             };
         }
         case actionTypes.loadMoreReplies + commonTypes.status.rejected:{
+            let {commentGroupId} = action.payload;
             return {
                 ...state,
                 comments:{
                     ...state.comments,
-                    status: loaderStatus.rejected
+                    data:{
+                        ...state.comments.data,
+                        [commentGroupId] : {
+                            ...state.comments.data[commentGroupId],
+                            loaderStatus: loaderStatus.rejected
+                        }
+                    }
+                    //status: loaderStatus.rejected
                 }
             };
         }
@@ -256,6 +273,8 @@ const CommentsReducer = ( state = initialState.commentsReducer, action) =>{
             if(value === null){  value = prevTextarea.value || ''; }                
             if(status === null){  status = prevTextarea.status || null; }       
             if(isActive === null){  isActive = prevTextarea.isActive || null; }   
+
+            //rem: if isActive === true, deselect rest
 
             return {
                 ...state,
@@ -272,52 +291,21 @@ const CommentsReducer = ( state = initialState.commentsReducer, action) =>{
 
         }
 
-        /*
-        case actionTypes.updateTextarea:{
-            let {id, value, status, isActive} = action.payload;
-
-
-            if(id === -1){
-                if(value === null){  value = state.mainTextarea.value || ''; }                
-                if(status === null){  status = state.mainTextarea.status || null; }       
-                return {
-                    ...state,
-                    mainTextarea:{
-                        ...state.mainTextarea,
-                        value,
-                        status
+        case actionTypes.toggleActiveTextarea:{
+            let {id} = action.payload;
+            let isActive = !state.textarea[id].isActive;
+            //rem: if isActive === true, deselect rest
+            return {
+                ...state,
+                textarea: {
+                    ...state.textarea,
+                    [id]: {
+                        ...state.textarea[id],
+                        isActive
                     }
-                };
-            }else{    
-                let prevTextarea = check( state => state.comments.data[id].textarea !== undefined )(state) ? state.comments.data[id].textarea : {};
-                if(value === null){  value = prevTextarea.value || ''; }                
-                if(status === null){  status = prevTextarea.status || null; }       
-                if(isActive === null){  isActive = prevTextarea.isActive || null; }       
-                //rem, search for replies in comments, not only comments
-                //keep all textarea state inline...
-                return {
-                    ...state,
-                    comments:{
-                        ...state.comments,
-                        data:{
-                            ...state.comments.data,
-                            [id] : {
-                                ...state.comments.data[id],
-                                textarea: {
-                                    ...prevTextarea,
-                                    value,
-                                    status,
-                                    isActive
-                                }
-                            }
-                        },
-                    }
-                };
-
+                }
             }
-
-        }*/
-
+        }
     }
     
     return state;

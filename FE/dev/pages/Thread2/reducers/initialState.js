@@ -3,11 +3,7 @@ const initialState = {
         
         comments: {
             data: {},
-            status: null
-        },
-        mainTextarea: {
-            status: null,
-            value: ''
+            loaderStatus: null
         },
         textarea:{
             '-1': {
@@ -15,20 +11,19 @@ const initialState = {
                 value: '' 
             }
         }
-
-
-    /*
+        
+        
+        /*
         //replies:
         BE: [id]:{"id":38,"content":"zzz","replyTo":4,"groupId":4,
             "threadId":1,"userId":"","user":null}
-        FE:
-            status,     
-            textarea: {value, status}
-        //comments:
+        FE: status   
+
+        //comments: 
         //same + replies:{...}
     */
 
-/*
+    /*
         data:[],
         pending: false,  //pending overall
         //pending:{
@@ -42,9 +37,14 @@ const initialState = {
             comments:{}     //comments/replies/commentGroup status
                             //{value, status, commentGroupStatus }
         },
-        activeTextarea: {}  //{active}*/
+        activeTextarea: {}  //{active}
+        */
     },
-    threadReducer:{}
+    threadReducer:{
+        thread:{
+            id: 1
+        }
+    }
 }
 export default initialState;
 

@@ -2,6 +2,12 @@
     "testVar": "test var",
     "dbType":"none",
     "db": {
-        "connectionString":"Data Source=./BE/sqlite/Test.db"
+        "none":{},
+        "sqlite":{
+            "connectionString":"Data Source=./BE/sqlite/Test.db"
+        },
+        "postgre":{
+            "connectionString":"Server=localhost;Database=App;Username=postgres;Password=123456"
+        }
     }
 }

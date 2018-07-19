@@ -129,7 +129,10 @@ export const loadMoreComments = (threadId, lastId) => dispatch => {
 
 //loadMoreComments
 export const loadMoreReplies = (threadId, commentGroupId, lastReplyId) => dispatch => {
-    dispatch( {type: actionTypes.loadMoreReplies + commonTypes.status.pending } );
+    dispatch({
+        type: actionTypes.loadMoreReplies + commonTypes.status.pending,
+        commentGroupId
+    });
 
     services.loadMoreReplies(threadId, commentGroupId, lastReplyId).then( result => {
         dispatch({
@@ -139,7 +142,8 @@ export const loadMoreReplies = (threadId, commentGroupId, lastReplyId) => dispat
 
     }).catch( error => {
         dispatch({
-            type: actionTypes.loadMoreReplies + commonTypes.status.rejected
+            type: actionTypes.loadMoreReplies + commonTypes.status.rejected,
+            commentGroupId
         });
     });
 

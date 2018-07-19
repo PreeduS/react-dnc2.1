@@ -1,80 +1,78 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 import * as styles from '../styles/CommentGroup.js';
 import Link from '~/commons/components/Link';
+import {loaderStatus, commentStatus} from '../constants';
+import { Loader } from 'semantic-ui-react'
 //reducers
-import CommentsReducer from '../reducers/CommentsReducer'
+//import CommentsReducer from '../reducers/CommentsReducer'
 //actions
 import {loadMoreReplies } from '../actions';
 //components
-//import Comment from './Comment';
+import Comment from './Comment';
 
 
 class CommentGroup extends React.Component {
     constructor(){
         super();
         this.content = '';
-        this.loadMoreRepliesLink = this.loadMoreRepliesLink.bind(this);
+        this.getLoadMoreRepliesLabel = this.getLoadMoreRepliesLabel.bind(this);
         this.loadMoreReplies = this.loadMoreReplies.bind(this);
     }
 
     loadMoreReplies(){
         const {id, replies} = this.props.comment;
         const hasReplies = replies !== undefined;
+        const repliesKeys = Object.keys(replies);
         let lastReplyId = null;
+
         if(hasReplies){
-            //lastReplyId = replies[replies.length-1].id;     //edit lastReplyId that is not recent (status)
-
-
-            let repliesReverse = [...replies].reverse();
-            let lastReply = repliesReverse.find(r =>{
-                let replyId = r.id;
-                let statusComments = this.props.comments.status.comments;
-                if(
-                    (statusComments && statusComments[replyId] === undefined) ||
-                    (statusComments && statusComments[replyId] && statusComments[replyId].status !== 'recent' )
-
-                ){return true;}
-                return false;
-            });
-    
-            lastReplyId = lastReply.id;
-   
+            lastReplyId = repliesKeys.reverse().find( id => {
+                return(replies[id] && replies[id].status !== commentStatus.recent);       
+            });   
         }
-        console.log('loadMoreReplies ',id, replies, lastReplyId)
-        const threadId = 1;
+
+        const threadId = this.props.thread.id;
         this.props.loadMoreReplies(threadId, id, lastReplyId)
     }
-    loadMoreRepliesLink(nrReplies, replies){   //edit name rem getLoadMoreReplies
-        //if(!nrReplies){return ''; }
 
-        const {id} = this.props.comment;
-        //const currentStatus = this.props.commentsStatus[id];
-        const currentStatus = this.props.comments.status.comments[id];
+    getLoadMoreRepliesLabel(nrReplies, repliesKeys){   
+        const {comment} = this.props;
+        const {id} = comment;
+        const currentStatus = comment.loaderStatus;
+        const isPending = currentStatus === loaderStatus.pending;
 
-        const isPending = (currentStatus === undefined) ? false : currentStatus.commentGroupStatus === 'pending';
+        let nrVisibleRplies = replies ? repliesKeys.length : 0;
 
-
-        let nrVisibleRplies = replies ? replies.length : 0;
-        let content = (isPending ? '[L] ':'') +'Load more replies[t]' + nrReplies +' - [v]' + nrVisibleRplies;
-        return <Link onClick = {this.loadMoreReplies}>{content}</Link>;
+        let content = <span>
+            {isPending && <Loader active inline size = "tiny" />} 
+            Load more replies {nrVisibleRplies}/{nrReplies} 
+        </span>;
+        return content;
     }
 
     render() {
-        const {replies, nrReplies} = this.props.comment;
-        var loadMoreRepliesLink = this.loadMoreRepliesLink(nrReplies, replies);
-        return <div>commentgroup</div>
+        const {comment} = this.props;
+        const {replies, nrReplies} = comment;
+        const repliesKeys = Object.keys(replies);
+
+        const isPending = comment.loaderStatus === loaderStatus.pending;
+        const isDisabled = comment.loaderStatus === loaderStatus.done;        
+
+        var loadMoreRepliesLabel = this.getLoadMoreRepliesLabel(nrReplies, repliesKeys);
         return (
             <styles.CommentGroupWrapper>
-                <Comment {...this.props.comment} isReply = {false} />
-                {replies && replies.length > 0 && replies.map(r =>
-                    <div key={r.id}>
-                        <Comment {...r} isReply = {true} />
+                <Comment {...comment} isReply = {false} />
+                {repliesKeys.length > 0 && repliesKeys.map(key => {
+                    let reply = replies[key];
+                    <div key={key}>
+                        <Comment {...reply} isReply = {true} />
                     </div>
-                )}
+                })}
                 
                 <styles.LoadCommentsContainer hasReplies = {replies!==undefined}>
-                    {loadMoreRepliesLink}
+                    <Link onClick = {this.loadMoreReplies} disabled = {isPending || isDisabled} >{loadMoreRepliesLabel}</Link>;
                 </styles.LoadCommentsContainer>
             </styles.CommentGroupWrapper>
 
@@ -82,8 +80,16 @@ class CommentGroup extends React.Component {
     }
 }
 
-const mapStateToProps = state =>( {
-    comments: state.CommentsReducer
+CommentGroup.propTypes = {
+    //comments: PropTypes.object.isRequired,
+    comment: PropTypes.object.isRequired,
+    thread: PropTypes.object.isRequired,
+
+};
+
+const mapStateToProps = state =>({
+    //comments: state.CommentsReducer,
+    thread: state.threadReducer.thread,
 });
 
 const mapDispatchToProps = dispatch=>({

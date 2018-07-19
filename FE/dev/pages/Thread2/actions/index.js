@@ -14,6 +14,16 @@ export const updateTextarea = ({id, value, status, isActive}) => dispatch => {
         payload: {id, value, status, isActive}
     });
 };
+
+/*
+//or setSingleActiveTextarea
+export const setActiveTextarea = ({id}) => dispatch => { 
+    dispatch({
+        type: actionTypes.setActiveTextarea,
+        payload: {id}
+    });
+}*/
+
 export const toggleActiveTextarea = id => ({
     type: actionTypes.toggleActiveTextarea,
     payload: {id}

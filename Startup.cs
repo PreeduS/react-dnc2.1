@@ -27,12 +27,15 @@ namespace App{
             services.AddMvc(options => options.Conventions.Insert(0,new ModeRouteConvention()));
             
        
-            if(false){
-                services.AddDbContext<AppDbContext>(option => option.UseSqlite(Configuration["db:connectionString"]) );
-            }else{
+            if(Configuration.UseMockups){
+                services.AddDbContext<AppDbContext>(option => option.UseInMemoryDatabase() );
 
+            }else if(Configuration.UseSqlite){
+                services.AddDbContext<AppDbContext>(option => option.UseSqlite(Configuration["db:sqlite:connectionString"]) );
+
+            }else{
                 services.AddEntityFrameworkNpgsql().AddDbContext<AppDbContext>( options => 
-                    options.UseNpgsql("Server=localhost;Database=App;Username=postgres;Password=123456")
+                    options.UseNpgsql("db:postgre:connectionString")
                 );
             }
 

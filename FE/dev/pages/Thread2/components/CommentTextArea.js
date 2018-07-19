@@ -1,8 +1,9 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import {textareaStatus} from '../constants';
 
-import CommentsReducer from '../reducers/CommentsReducer'
+//import CommentsReducer from '../reducers/CommentsReducer';
 
 import Button from '~/commons/components/Button';
 import * as styles from '../styles/CommentTextArea';
@@ -13,8 +14,8 @@ class CommentTextArea extends React.Component {
         this.resizeTextarea = this.resizeTextarea.bind(this);
         this.addCommentOrReply = this.addCommentOrReply.bind(this);
         this.getTextareaValue = this.getTextareaValue.bind(this);
+        this.onChange = this.onChange.bind(this);
         //this.prevHeight = null;
-
 
     }
 
@@ -23,13 +24,13 @@ class CommentTextArea extends React.Component {
         elem.style.height = 'auto';
         elem.style.height = elem.scrollHeight;
     }
-    updateTextAreaValue(el){
+    onChange(el){
         this.props.onChange(el);
     }
 
     addCommentOrReply(){
         const textareaValue = this.getTextareaValue();
-        this.props.addCommentOrReply(textareaValue); //maybe onAdd onSubmit
+        this.props.onSubmit(textareaValue);
     }
     getTextareaValue(){
         const {id, textarea} = this.props;
@@ -38,14 +39,14 @@ class CommentTextArea extends React.Component {
     }
 
     render() {
-        const {id, isReply, isVisible} = this.props;
-        const currentStatus = this.props.comments.status;//.comments[id];
-        const isPending = currentStatus === undefined ? false : currentStatus === 'pending';
-        const isError = currentStatus === undefined ? false : currentStatus === 'error';
+        const {id, isReply, isVisible, onSubmit, textarea} = this.props;
+        const currentStatus = (textarea[id] && textarea[id].status) || null;
+        const isPending = currentStatus === textareaStatus.pending;
+        const isError = currentStatus === textareaStatus.rejected;   //'error';
         const textareaValue =  this.getTextareaValue();
 
         const isSubmitDisabled = textareaValue.trim().length === 0 || isPending;
-        const label = isReply? 'Add Reply' : 'Add Comment';
+        const label = isReply ? 'Add Reply' : 'Add Comment';
 
         if(!isVisible){  return <div></div>;  }
 
@@ -53,7 +54,7 @@ class CommentTextArea extends React.Component {
             <styles.CommentTextAreaWrapper>
                 <textarea
                     disabled = {isPending}
-                    onChange = {e=> {this.resizeTextarea(e); this.updateTextAreaValue(e);} }
+                    onChange = {e=> {this.resizeTextarea(e); this.onChange(e);} }
                     value = {textareaValue}>
                 </textarea>
                 <br />
@@ -74,11 +75,12 @@ class CommentTextArea extends React.Component {
     }
 }
 CommentTextArea.propTypes = {
-    comments: PropTypes.object.isRequired,
-    isReply: PropTypes.bool,
-    isVisible: PropTypes.bool.isRequired,
-    addCommentOrReply: PropTypes.func.isRequired,
     id: PropTypes.number.isRequired,
+    comments: PropTypes.object.isRequired,
+    textarea: PropTypes.object.isRequired,
+    isReply: PropTypes.bool.isRequired,
+    isVisible: PropTypes.bool.isRequired,
+    onSubmit: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
 }
 

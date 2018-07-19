@@ -8,6 +8,7 @@ class Link extends React.Component {
         this.clickHandler = this.clickHandler.bind(this);
     }
     clickHandler(e){
+        if(this.props.disabled){return;}
         if(this.props.onClick){
             this.props.onClick(e)
         }
@@ -21,6 +22,7 @@ class Link extends React.Component {
 
 Link.propTypes = {
     children: PropTypes.string.isRequired,
+    disabled: PropTypes.bool,
     onClick: PropTypes.func
 }
 
