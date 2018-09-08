@@ -1,5 +1,5 @@
 import React from 'react';
-import * as styles from '../styles/LoadMoreComments';
+import * as styles from '../../styles/LoadMoreComments';
 import PropTypes from 'prop-types';
 
 import Button from '~/commons/components/Button';
@@ -11,20 +11,20 @@ class LoadMoreComments extends React.Component {
 
 
     render(){
-        const {loading, disabled, onClick} = this.props;
+        const {loading, disabled, label, onClick} = this.props;
         return(
             <div>
                 <styles.LoadMoreCommentsWrapper>
                     <Button
                         onClick = {onClick}
-                        disabled = {loading || disabled}
+                        disabled = {disabled}
                         loading = {loading}
                         width = {'100%'}
                         height = {30}
                         inlineStyles = {'font-family: Roboto,sans-serif;'}
                         type = "gray"
                     >
-                        Load more comments
+                        {label}
                     </Button>
                 </styles.LoadMoreCommentsWrapper>
 

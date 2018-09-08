@@ -1,7 +1,19 @@
 
 export const commentStatus = {
-    recent: 'recent'            //userAdded maybe
+    //recent: 'recent',   
+    recentLoaded: 'recent_loaded',   
+    recentUserAdded: 'recent_user_added',   
 }
+/*
+rem:
+
+recent = recent loaded
+add:
+recentUserAdded
+
+after loading new comments/replies - reset to null
+*/
+
 
 export const textareaStatus = {
     pending: 'pending',

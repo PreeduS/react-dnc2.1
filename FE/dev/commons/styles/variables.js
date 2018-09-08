@@ -6,6 +6,8 @@ export const borderColorDarker = 'rgb(230,230,230)';
 const borderColor = 'rgb(236, 240, 241)';
 const borderColorLighter = 'rgb(240,240,240)';
 
+const color = 'rgb(40,40,40)';
+export const colorLighter = 'rgb(77, 77, 77)';
 
 /*mainContainer -> main left view*/
 

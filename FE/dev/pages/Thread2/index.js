@@ -19,7 +19,7 @@ class Thread extends React.Component {
     }
     render() {
         const {comments} = this.props;
-        const isLoading = Object.keys(comments.data).length > 0;
+        const isLoading = false;//Object.keys(comments.data).length === 0;//and loaderStatus === loaderStatus.pending;
         return (
             <styles.ThreadWrapper>
                 <Content />
@@ -36,7 +36,7 @@ Thread.propTypes = {
 
 const mapStateToProps = state =>( {
     comments: state.CommentsReducer.comments,
-    thread: state.threadReducer.thread
+    thread: state.ThreadReducer.thread
 });
 const mapDispatchToProps = dispatch => ({
     loadComments: threadId =>

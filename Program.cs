@@ -20,6 +20,7 @@ namespace App
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .UseUrls("http://localhost:3001")
                 .ConfigureAppConfiguration( (context, configBuilder) => {
                     configBuilder.AddJsonFile("mySettings.json");
                 });

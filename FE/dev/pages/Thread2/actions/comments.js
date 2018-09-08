@@ -18,7 +18,8 @@ const setTextarea = (id, status) => dispatch => {
         updateTextarea({
             id, 
             status, 
-            value: null, 
+            //value: null, 
+            value: '', 
             isActive: false
         })(dispatch);
 
@@ -131,7 +132,7 @@ export const loadMoreComments = (threadId, lastId) => dispatch => {
 export const loadMoreReplies = (threadId, commentGroupId, lastReplyId) => dispatch => {
     dispatch({
         type: actionTypes.loadMoreReplies + commonTypes.status.pending,
-        commentGroupId
+        payload:{commentGroupId}
     });
 
     services.loadMoreReplies(threadId, commentGroupId, lastReplyId).then( result => {
@@ -143,7 +144,7 @@ export const loadMoreReplies = (threadId, commentGroupId, lastReplyId) => dispat
     }).catch( error => {
         dispatch({
             type: actionTypes.loadMoreReplies + commonTypes.status.rejected,
-            commentGroupId
+            payload:{commentGroupId}
         });
     });
 

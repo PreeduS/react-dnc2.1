@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-//import * as variables from '~/commons/styles/variables';
+import * as variables from '~/commons/styles/variables';
 
 export const FieldContainer = styled.div`
     display:flex;
@@ -27,22 +27,26 @@ export const InputContent = styled.div`
     flex:1; 
     margin-right:10px;
 
-    input{
-        color:rgb(77,77,77);
-        border:0px;
-        outline:0px;
-        height:24px;
-        width:100%;
-        padding:0px 4px;
-        background:rgba(240,240,240,.3);
-        border:1px solid rgba(223,230,233,.7);
-        border-radius: 2px;
+
+`;
+export const Input = styled.input`
+    color: ${variables.colorLighter};
+    border:0px;
+    outline:0px;
+    height:24px;
+    width:100%;
+    padding:0px 4px;
+    background:rgba(240,240,240,.3);
+    border:1px solid rgba(223,230,233,.7);
+    border-radius: 2px;
+    ${props => !props.disabled && `
         &:active,&:focus{
             border:1px solid rgba(223,230,233,1);
             background:rgba(250,250,250,.6);
         }
-    }
+    `}
 `;
+
 export const ValidationContent = styled.div`
     flex:1;   
     min-width: 160px;

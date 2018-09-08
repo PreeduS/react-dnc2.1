@@ -1,6 +1,6 @@
 {
     "testVar": "test var",
-    "dbType":"none",
+    "dbType":"postgre",
     "db": {
         "none":{},
         "sqlite":{

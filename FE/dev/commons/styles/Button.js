@@ -63,7 +63,9 @@ export const ButtonGray = BaseButton.extend`
             background:rgb(236,237,242) !important;
             border:1px solid rgb(234,234,234) !important;
         }
-
+        &.disabled{
+            color:rgba(77,77,77,.8) !important;
+        }     
         ${props => props.inlineStyles}        
     }
 `;

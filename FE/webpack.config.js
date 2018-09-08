@@ -35,7 +35,7 @@ module.exports = {
         contentBase: output,
         inline: true,
         hot: false,
-        port: 8080,
+        port: 3000,
         stats: "errors-only",
         historyApiFallback:true
     },

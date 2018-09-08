@@ -6,6 +6,9 @@ const services = {
     ,
     logout: () =>
         axios.post('/api/UserManager/logout')
+    ,
+    getUserData: () =>
+        axios.post('/api/usermanager/getUserData')
 
 }
 

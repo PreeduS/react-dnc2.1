@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import Field from '~/commons/components/Field';
 
-import services from '~/commons/services';
+//import services from '~/commons/services';
 
 class LoginForm extends React.Component{
     constructor(){
@@ -14,15 +14,18 @@ class LoginForm extends React.Component{
         this.state = {
             username:'',
             password:'',
-            status:''
+           // status:''
         }
     }
 
     login(){
-        this.setState({status:''});
+        //this.setState({status:''});
         const {username, password} = this.state;
-        const {login, isPendingHandler} = this.props;
+        const {login} = this.props;
         
+        login(username, password);
+/*
+        //isPendingHandler - not used
         isPendingHandler(true);    
         services.login(username, password).then( result =>{
             isPendingHandler(false); 
@@ -35,7 +38,7 @@ class LoginForm extends React.Component{
             this.setState({
                 status: 'Wrong username of password'
             });
-        });
+        });*/
 
     }
 
@@ -44,9 +47,29 @@ class LoginForm extends React.Component{
             [mapTo]:value
         });
     }
+    /*static getDerivedStateFromProps(nextProps, prevState){
+        console.log('nextProps' , nextProps)
+        console.log('prevState' , prevState)
+        return prevState;
+    }*/
 
     render(){
-        const {username, password, status} = this.state;
+        const {username, password, /*status*/} = this.state;
+        //const {isPending} = this.props;
+       // const {loginStatus} = this.props;
+        const {statusMessage, disabled} = this.props;
+
+       /* let status = '';
+        if(loginStatus === 'fulfilled'){
+            status = 'Logged in successfully';
+        }
+        if(loginStatus === 'rejected'){
+            status = 'Wrong username of password';
+        }
+        if(loginStatus === 'pending'){
+            status = 'Loading...';
+        }*/
+        
         return(
             <div>
 
@@ -57,6 +80,7 @@ class LoginForm extends React.Component{
                     changeHandler = {this.changeHandler}
                     mapTo = {'username'}
                     value = {username}
+                    disabled = {disabled} 
                 />
                 <Field
                     type= "password"
@@ -65,11 +89,12 @@ class LoginForm extends React.Component{
                     changeHandler = {this.changeHandler}
                     mapTo = {'password'}
                     value = {password}
+                    disabled = {disabled} 
                 />
 
-                {status}
+                {statusMessage}
                 <br />
-                <button disabled = {this.props.isPending} onClick = {this.login}>Login</button>
+                <button disabled = {disabled} onClick = {this.login}>Login</button>
             </div>
         );
     }

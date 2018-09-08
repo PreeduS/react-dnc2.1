@@ -6,9 +6,11 @@ export const Link = styled.div`
     font-size:1.05rem;
     font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
     font-weight:bold;
-    cursor:pointer;
     user-select: none;
-    &:hover{
-        color:rgb(7, 7, 7);
-    }
+    ${props => !props.disabled && `
+        cursor:pointer;
+        &:hover{
+            color:rgb(7, 7, 7);
+        }
+    `}
 `;

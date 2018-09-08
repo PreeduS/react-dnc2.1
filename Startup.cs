@@ -23,19 +23,19 @@ namespace App{
             Configuration = configuration;
         }
         public void ConfigureServices(IServiceCollection services){
-
+            services.AddCors();
             services.AddMvc(options => options.Conventions.Insert(0,new ModeRouteConvention()));
             
        
-            if(Configuration.UseMockups){
+            if(Configuration.UseMockups()){
                 services.AddDbContext<AppDbContext>(option => option.UseInMemoryDatabase() );
 
-            }else if(Configuration.UseSqlite){
+            }else if(Configuration.UseSqlite()){
                 services.AddDbContext<AppDbContext>(option => option.UseSqlite(Configuration["db:sqlite:connectionString"]) );
 
             }else{
                 services.AddEntityFrameworkNpgsql().AddDbContext<AppDbContext>( options => 
-                    options.UseNpgsql("db:postgre:connectionString")
+                    options.UseNpgsql(Configuration["db:postgre:connectionString"])
                 );
             }
 
@@ -62,17 +62,32 @@ namespace App{
                 options.ExpireTimeSpan = TimeSpan.FromDays(14);
                 options.Cookie.Expiration = TimeSpan.FromDays(14);
                 options.LoginPath = "/api/App/Login";
+
             });
 
-
+           services.AddSession(options => {
+                options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
+                
+            });
 
         }
 
         
         public void Configure(IApplicationBuilder app, IHostingEnvironment env){
-
+            app.Use(async (context, next) => {
+                System.Threading.Thread.Sleep(5000);
+                await next.Invoke();
+            });
             if (env.IsDevelopment()){
                 app.UseDeveloperExceptionPage();
+                app.UseCors(builder =>
+                    builder
+                    //.WithOrigins("http://localhost:3000")
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                );
             }
 
             app.UseAuthentication();

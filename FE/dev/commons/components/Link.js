@@ -15,16 +15,18 @@ class Link extends React.Component {
     }
 
     render(){
-        const {children} = this.props;
-        return <styles.Link onClick = {this.clickHandler}>{children}</styles.Link>
+        const {children, disabled} = this.props;
+        return <styles.Link onClick = {this.clickHandler} disabled = {disabled}>{children}</styles.Link>
     }
 }
 
 Link.propTypes = {
-    children: PropTypes.string.isRequired,
+    children: PropTypes.node.isRequired,
     disabled: PropTypes.bool,
     onClick: PropTypes.func
 }
-
+Link.defaultProps = {
+    disabled: false
+};
 
 export default Link;

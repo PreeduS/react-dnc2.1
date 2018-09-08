@@ -67,6 +67,15 @@ namespace App.Controllers{
             Repo.Logout();
             return Json(new {Success = true});
         }
+        [Route("GetUserData")]
+        public async Task<IActionResult> GetUserDataAsync(){
+            string UserId = Repo.GetUserId(User);
+            var UserData = await Repo.GetUserAsync(User);
+            return Json( new { 
+                UserId = UserId,
+                Username = UserData?.UserName
+            });
+        }
 
 
         

@@ -39,12 +39,12 @@ dotnet add package Microsoft.EntityFrameworkCore.Tools --version 2.0.1
 
 
 --------
-dotnet ef migrations add Initial --context TestDbContext
+dotnet ef migrations add Initial --context AppDbContext
 
-dotnet ef database update --context TestDbContext
+dotnet ef database update --context AppDbContext
 
 
-dotnet ef database update migrationName --context TestDbContext
+dotnet ef database update migrationName --context AppDbContext
 
 --------
 sqlite3 dbname.db

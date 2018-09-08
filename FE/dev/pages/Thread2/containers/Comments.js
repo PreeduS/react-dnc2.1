@@ -3,13 +3,19 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import CommentsReducer from '../reducers/CommentsReducer'
 //import ThreadReducer from '../reducers/ThreadReducer'
-import {addComment, updateTextarea, loadMoreComments } from '../actions';
+import {addComment, loadMoreComments } from '../actions/comments';
+import {updateTextarea } from '../actions/index';
 
-import CommentGroup from '../components/CommentGroup';
-import CommentTextArea from '../components/CommentTextArea';
-import LoadMoreComments from '../components/LoadMoreComments';
+import {getComments, geThread} from '../selectors'
+import getCommentsList from '../commons/getCommentsList'
+
+import CommentGroup from '../components/comments/CommentGroup';
+import CommentTextArea from '../components/comments/CommentTextArea';
+import LoadMoreComments from '../components/comments/LoadMoreComments';
 import {commentStatus, loaderStatus} from '../constants';
 import * as styles from '../styles/Comments.js';
+
+
 
 class Comments extends React.Component {
     constructor(){
@@ -25,15 +31,22 @@ class Comments extends React.Component {
         this.props.addComment(comment);
     }
     loadMoreComments(){
-        const {comments} = this.props;
+        const {comments, thread} = this.props;
+        /*
         const commentsData = comments.data;
         const commentsKeys = Object.keys(commentsData);
-
         const lastId = commentsKeys.reverse().find( id => {
             return(commentsData[id] && commentsData[id].status !== commentStatus.recent);
         });
+        */
+        const commentsList = getCommentsList(comments.data, 'ASC');
+      
+        const lastComment = commentsList.find( comment => 
+            true === true //comment.status !== commentStatus.recent      //maybe not recent: recentUserAdded
+        );
+        const lastId = lastComment === undefined ? null : lastComment.id;
 
-        const threadId = this.props.thread.id;
+        const threadId = thread.id;
         this.props.loadMoreComments(threadId, lastId)
     }
 
@@ -49,8 +62,10 @@ class Comments extends React.Component {
 
     render() {
         const {comments} = this.props;
-        const commentsData = comments.data;
-        const commentsKeys = Object.keys(commentsData);
+        //const commentsData = comments.data;
+        //const commentsKeys = Object.keys(commentsData);
+
+        const commentsList = getCommentsList(comments.data);
 
         const isPending = comments.loaderStatus === loaderStatus.pending;
         const isDisabled = comments.loaderStatus === loaderStatus.done;
@@ -65,11 +80,13 @@ class Comments extends React.Component {
                     isReply = {false}
                 />
                 <br />                
-                {commentsKeys.length > 0 && commentsKeys.map(key => {
-                    let comment = commentsData[key];
+                {//commentsKeys.length > 0 && commentsKeys.map(key => {
+                    commentsList.map( comment => {
+                    //let comment = commentsData[key];
+                    //key = {key}
                     return(
                         <CommentGroup
-                            key = {key}
+                            key = {comment.id}
                             comment = {comment}
                             addNewComment = {this.addNewComment}
                         />
@@ -77,8 +94,9 @@ class Comments extends React.Component {
                 })}
                 <LoadMoreComments 
                     loading = {isPending} 
-                    disabled = {isDisabled} 
+                    disabled = {isPending || isDisabled} 
                     onClick = {this.loadMoreComments}
+                    label = {isDisabled ? 'No more comments' : 'Load more comments'}
                 />                                
             </styles.CommentsWrapper>
         );
@@ -92,8 +110,8 @@ Comments.propTypes = {
 };
 
 const mapStateToProps = state =>( {
-    comments: state.CommentsReducer.comments,
-    thread: state.ThreadReducer.thread
+    comments: getComments(state),
+    thread: geThread(state),
 });
 const mapDispatchToProps = dispatch => ({
     updateTextarea: ({id,value,status, isActive}) =>

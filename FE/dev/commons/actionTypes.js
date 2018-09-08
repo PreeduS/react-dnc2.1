@@ -2,7 +2,9 @@
 //update later as user specific
 export const actionTypes = {
     login : 'LOGIN',
-    logout : 'LOGOUT'
+    logout : 'LOGOUT',
+    getUserData : 'GET_USER_DATA',
+    updateUser : 'UPDATE_USER',
 };
 
 const commonTypes = {
@@ -12,4 +14,5 @@ const commonTypes = {
         rejected: '_REJECTED',
     }
 }
+
 export default commonTypes;

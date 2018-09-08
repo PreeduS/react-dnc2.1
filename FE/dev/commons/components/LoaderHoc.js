@@ -6,12 +6,32 @@ import { Loader } from 'semantic-ui-react'
 const LoaderHoc = Component =>{
     class LoaderHocContainer extends React.Component{
         render(){
-            const {loading, ...rest} = this.props;
+            let {loading, loader, label, ...rest} = this.props;
 
-            if(loading){
+            return(
+                <styles.Wrapper>
+                    <styles.DimmerContainer loading = {loading}>
+                        <styles.LoaderContainer>
+                            { loader && ( 
+                                <styles.Center>
+                                    <Loader active inline size = "tiny"/>
+                                    {label && <styles.Label>{label}</styles.Label>}
+                                </styles.Center>
+                            )}
+                        </styles.LoaderContainer>
+                    </styles.DimmerContainer>
+                    <styles.Dimmer loading = {loading}>
+                        <Component {...rest}/>
+                    </styles.Dimmer>
+                </styles.Wrapper>
+
+            );
+
+            //if(loading){
+/*
                 return(
                     <styles.Wrapper>
-                        <styles.DimmerContainer>
+                        <styles.DimmerContainer loading = {loading}>
                             <styles.LoaderContainer>
                                 <div><Loader active inline size = "tiny"/> <span>Loading...</span></div>
                             </styles.LoaderContainer>
@@ -21,14 +41,22 @@ const LoaderHoc = Component =>{
                         </styles.Dimmer>
                     </styles.Wrapper>
 
-                );
-            }
-            return <Component {...rest} />
+                );*/
+            //}
+            //return <Component {...rest} />
         }
     }
+
+
     LoaderHocContainer.propTypes = {
-        loading: PropTypes.bool.isRequired
+        loading: PropTypes.bool.isRequired,
+        loader: PropTypes.bool,
+        label: PropTypes.string,
     }
+    LoaderHocContainer.defaultProps = {
+        loader: false,
+        label: 'Loading'
+    };
     return LoaderHocContainer;
 
 }

@@ -1,12 +1,13 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {textareaStatus} from '../constants';
+import {textareaStatus} from '../../constants';
 
+import {getComments, geTextarea} from '../../selectors';
 //import CommentsReducer from '../reducers/CommentsReducer';
 
 import Button from '~/commons/components/Button';
-import * as styles from '../styles/CommentTextArea';
+import * as styles from '../../styles/CommentTextArea';
 
 class CommentTextArea extends React.Component {
     constructor(){
@@ -86,8 +87,8 @@ CommentTextArea.propTypes = {
 
 
 const mapStateToProps = state =>( {
-    comments: state.CommentsReducer.comments,
-    textarea: state.CommentsReducer.textarea
+    comments: getComments(state),
+    textarea: geTextarea(state)
 });
 
 export default connect(mapStateToProps, null)(CommentTextArea);

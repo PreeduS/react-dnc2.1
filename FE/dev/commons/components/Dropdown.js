@@ -11,10 +11,10 @@ class Dropdown extends React.Component {
     }
 
     handleClick(e){
-        var dropDownParentNode = this.dropdownRef.current.parentNode
-        var target = e.target;
-        var clickedInside = false;
-        var preventClose = this.props.preventClose;
+        const dropDownParentNode = this.dropdownRef.current.parentNode
+        let target = e.target;
+        let clickedInside = false;
+        //var preventClose = this.props.preventClose;
 
         while(target.parentNode !== null){
             target = target.parentNode;
@@ -22,7 +22,8 @@ class Dropdown extends React.Component {
                 clickedInside = true; break;
             }
         }
-        if(!clickedInside && !preventClose){
+        //if(!clickedInside && !preventClose){
+        if(!clickedInside){
             this.props.onDropdownBlur(e);
         }
 
@@ -36,8 +37,8 @@ class Dropdown extends React.Component {
     }
 
     render(){
-        let {showDropdown, preventClose} = this.props;
-        if(preventClose){ showDropdown = true; }
+        let {showDropdown, /*preventClose*/} = this.props;
+        //if(preventClose){ showDropdown = true; }
         return(
             <div ref = {this.dropdownRef}>
                 {showDropdown &&
@@ -52,11 +53,12 @@ class Dropdown extends React.Component {
 Dropdown.propTypes = {
     showDropdown: PropTypes.bool.isRequired,
     onDropdownBlur: PropTypes.func,
-    preventClose: PropTypes.bool
+    //preventClose: PropTypes.bool
 
 }
+/*
 Dropdown.defaultProps = {
     preventClose: false
 };
-
+*/
 export default Dropdown;

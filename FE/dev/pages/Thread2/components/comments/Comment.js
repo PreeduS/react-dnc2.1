@@ -3,13 +3,15 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import Link from '~/commons/components/Link';
 import CommentTextArea from './CommentTextArea';
+
+import {geTextarea, geThread} from '../../selectors';
 //reducers
 //import ThreadReducer from '../reducers/ThreadReducer';
 //import CommentsReducer from '../reducers/CommentsReducer';
-import {toggleActiveTextarea, updateTextarea} from '../actions';
-import {addReply} from '../actions/comments';
+import {toggleActiveTextarea, updateTextarea} from '../../actions';
+import {addReply} from '../../actions/comments';
 
-import * as styles from '../styles/Comment.js';
+import * as styles from '../../styles/Comment.js';
 
 
 class Comment extends React.Component {
@@ -42,8 +44,9 @@ class Comment extends React.Component {
     }
 
     render(){
-        const {id, content, isReply, userId, textarea} = this.props;
-        const isVisible = textarea[id] && textarea[id].isActive;
+        let {id, content, isReply, userId, textarea} = this.props;
+        const isVisible = (textarea[id] && textarea[id].isActive) || false;
+        //console.log('comment ', this.props)
 
         const tempc = ` | id: ${id} --- Comment: 
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
@@ -68,8 +71,8 @@ class Comment extends React.Component {
                                 {content}
                             </styles.Content>
                             <styles.Footer>
-                                <div onClick = {this.toggleTextarea}>
-                                    <Link>Reply</Link>
+                                <div >
+                                    <Link onClick = {this.toggleTextarea}>Reply</Link>
                                 </div>
 
                             </styles.Footer>
@@ -104,8 +107,8 @@ Comment.propTypes = {
 };
 
 const mapStateToProps = state =>( {
-    textarea: state.CommentsReducer.textarea,
-    thread: state.threadReducer.thread,
+    textarea: geTextarea(state),
+    thread: geThread(state),
 });
 
 const mapDispatchToProps = dispatch=>({

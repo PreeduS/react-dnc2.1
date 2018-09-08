@@ -56,40 +56,48 @@ namespace App.Controllers{
 
         [Route("AddComment")]
         [Authorize]
-        public IActionResult AddComment(){
+        public IActionResult AddComment([FromBody] AddCommentRequestModel comment){
             
             //string UserId = "439e896d-d4d4-4c3e-937c-cd45d6f63dfe"; //temp
             string UserId = UserManagerRepo.GetUserId(User);
             //string UserId = "1"; //temp
 
-            Repo.Add( new Comment(){
-                Content = "Comment 4",
-                GroupId = 2,
-                ReplyTo = 1,
-                ThreadId = 1,
+            var newComment = new Comment(){
+                Content = comment.Content,
+                GroupId = null,
+                ReplyTo = null,
+                ThreadId = comment.ThreadId,
                 UserId = UserId
-            });
-
-            try{
+            };
+            Repo.Add(newComment);
+            if( Repo.SaveChanges() > 0){
+                //return Json(new {Success = true});
+                return Json(newComment);                        //rem map to viewmodel
+    
+            }
+            return BadRequest(new {Errors = ""} );     
+            /*try{
                 Repo.SaveChanges();
             }catch(DbUpdateException e){
                 return BadRequest(new {Errors = e.InnerException.Message} );
             }
-            return Json(new {Success = true});
+            return Json(new {Success = true});*/
         }
 
         [Route("AddReply")]
+        [Authorize]
         public IActionResult AddReply([FromBody] AddReplyRequestModel reply){
 
             if(!ModelState.IsValid){
                 return BadRequest(new {Errors = Validation.GetErrors(ModelState)} );          
             }
-
+            
             string ReplyContent = reply.Content;
             int ReplyTo = reply.ReplyTo;
             int ThreadId = reply.ThreadId;
             //string UserId = "1"; //temp
-            string UserId = "439e896d-d4d4-4c3e-937c-cd45d6f63dfe";
+            //string UserId = "439e896d-d4d4-4c3e-937c-cd45d6f63dfe";
+            string UserId = UserManagerRepo.GetUserId(User);
 
             var result = Repo.Find(c => c.Id == ReplyTo && c.ThreadId == ThreadId).FirstOrDefault();
             if(result == null){
@@ -105,7 +113,7 @@ namespace App.Controllers{
                 Content = ReplyContent,
                 ReplyTo = ReplyTo,
                 GroupId = GroupId,
-                ThreadId = 1,
+                ThreadId = ThreadId,
                 UserId = UserId              
             };
 
@@ -149,6 +157,12 @@ namespace App.Controllers{
         public string Content { get; set; }
         [Required]
         public int ReplyTo { get; set; }
+        [Required]
+        public int ThreadId { get; set; }
+    }
+    public class AddCommentRequestModel{
+        [Required]
+        public string Content { get; set; }
         [Required]
         public int ThreadId { get; set; }
     }

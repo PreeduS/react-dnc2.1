@@ -55,9 +55,9 @@ export const Content = styled.div`
 export const Footer = styled.div`
     padding:0px 5px;
     margin:5px 0px;
-    >b{
+   /* >b{
         cursor:pointer;
         user-select: none; 
-    }
+    }*/
 `;
 

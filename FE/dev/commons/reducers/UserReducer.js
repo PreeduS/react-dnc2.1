@@ -1,28 +1,99 @@
 
 import {initialState} from './initialState';
-import {actionTypes} from '../actionTypes';
+import commonTypes, {actionTypes} from '../actionTypes';
+import {userStatus} from '~/commons/constants';
 
-
-const UserReducer = (state = initialState.user, action) =>{
+//move to state.user
+const UserReducer = (state = initialState, action) =>{
     switch(action.type){
-        case actionTypes.login:
+        //login
+        case actionTypes.login + commonTypes.status.pending:
             return{
                 ...state,
-                username: action.payload
+                user:{
+                    ...state.user,
+                    username: null,
+                    loginStatus: userStatus.pending
+                }
             };
-        case actionTypes.logout + '_PENDING':
+        case actionTypes.login + commonTypes.status.fulfilled:
             return{
                 ...state,
-                username: null,
-                logoutPending: true
+                user:{
+                    ...state.user,
+                    loginStatus: userStatus.fulfilled,
+                    username: action.payload.username
+                }
             };
-        case actionTypes.logout + '_FULFILLED':
-        case actionTypes.logout + '_REJECTED':
+        case actionTypes.login + commonTypes.status.rejected:
             return{
                 ...state,
+                user:{
+                    ...state.user,
+                    username: null,
+                    loginStatus: userStatus.rejected
+                }
+            };
+
+        //logout
+        case actionTypes.logout + commonTypes.status.pending:
+            return{
+                ...state,
+                user:{
+                    ...state.user,
+                    username: null,
+                    logoutStatus: userStatus.pending
+                }
+            };
+        //on logout reset loginStatus
+        case actionTypes.logout + commonTypes.status.fulfilled:
+        return{
+            ...state,
+            user:{
+                ...state.user,
                 username: null,
-                logoutPending: false
-            };            
+                logoutStatus: userStatus.fulfilled
+            }
+        };   
+        case actionTypes.logout + commonTypes.status.rejected:
+            return{
+                ...state,
+                user:{
+                    ...state.user,
+                    logoutStatus: userStatus.rejected
+                }
+            };     
+        //getUserData    
+        case actionTypes.getUserData + commonTypes.status.pending:
+            return{
+                ...state,
+                user:{
+                    ...state.user,
+                    username: null,
+                    //loginStatus: userStatus.pending,
+                    initialLoginStatus: userStatus.pending
+                }
+            };
+        case actionTypes.getUserData + commonTypes.status.fulfilled:
+            return{
+                ...state,
+                user:{
+                    ...state.user,
+                    username: action.payload.username,
+                    //loginStatus: userStatus.fulfilled,
+                    initialLoginStatus: userStatus.fulfilled
+                }
+            };
+        case actionTypes.getUserData + commonTypes.status.rejected:
+            return{
+                ...state,
+                user:{
+                    ...state.user,
+                    username: null,
+                    //loginStatus: userStatus.rejected,
+                    initialLoginStatus: userStatus.rejected //not logged in
+                }
+            };
 
     }
     return state;
