@@ -1,10 +1,16 @@
 
-//update later as user specific
+
 export const actionTypes = {
-    login : 'LOGIN',
-    logout : 'LOGOUT',
-    getUserData : 'GET_USER_DATA',
-    updateUser : 'UPDATE_USER',
+    user: {
+        logout: 'COMMON_LOGOUT',
+        login: 'COMMON_LOGIN',
+        register: 'COMMON_REGISTER',
+        getUserData: 'COMMON_GET_USER_DATA',
+    },
+    commons:{
+        getInitialData: 'COMMON_GET_INITIAL_DATA'
+    }
+
 };
 
 const commonTypes = {

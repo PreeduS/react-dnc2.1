@@ -1,9 +1,10 @@
 import styled from 'styled-components';
-import * as variables from '~/commons/styles/variables';
+
 
 
 export const CommentGroupWrapper = styled.div`
-    border:1px solid ${variables.mainContainerBorderColor};
+  
+    border:1px solid ${props => props.theme.mainContainer.borderColor};
     margin-bottom:25px;
 `;
 export const LoadCommentsContainer = styled.div`

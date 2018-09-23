@@ -20,8 +20,8 @@ namespace App.Controllers{
         }
 
 
-        [Route("Register")]
-        public async Task<IActionResult> Register(RegisterRequestModel user){
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody]RegisterRequestModel user){
 
             if(!ModelState.IsValid){
                 return BadRequest(new {Success = false, Errors = Validation.GetErrors(ModelState)} );
@@ -76,8 +76,19 @@ namespace App.Controllers{
                 Username = UserData?.UserName
             });
         }
-
-
+        
+        //add find by id
+        [HttpGet("UserExists")]
+        public async Task<IActionResult> UserExists([FromQuery]string username){
+            if(username == null){
+                return Json(new {UserExists = false});
+            }
+            var result = await Repo.FindByNameAsync(username);
+            if(result == null){
+                return Json(new {UserExists = false});
+            }
+            return Json(new {UserExists = true});
+        }
         
     }
 

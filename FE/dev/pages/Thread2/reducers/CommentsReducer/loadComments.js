@@ -8,6 +8,7 @@ const loadCommentsPending = () => state => (
         ...state,
         comments:{
             ...state.comments,
+            data:{},
             loaderStatus: loaderStatus.pending
         }
     }

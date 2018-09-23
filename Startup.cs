@@ -41,6 +41,7 @@ namespace App{
 
             services.AddTransient<ICommentRepo, CommentRepo>();
             services.AddTransient<IUserManagerRepo, UserManagerRepo>();
+            services.AddTransient<IUsersRepo, UsersRepo>();
 
             //Identity
             services.AddIdentity<ApplicationUser,IdentityRole>()

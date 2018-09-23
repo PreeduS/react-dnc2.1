@@ -49,7 +49,7 @@ class CommentTextArea extends React.Component {
         const label = isReply? 'Add Reply' : 'Add Comment';
 
         if(!isVisible){  return <div></div>;  }
-
+//inlineStyles = {'border-top:0px !important;border-top-left-radius: 0px;border-top-right-radius: 0px;'}
         return(
             <styles.CommentTextAreaWrapper>
                 <textarea
@@ -62,7 +62,7 @@ class CommentTextArea extends React.Component {
                 <Button
                     onClick = {this.addCommentOrReply}
                     disabled = {isSubmitDisabled}
-                    inlineStyles = {'border-top:0px !important;border-top-left-radius: 0px;border-top-right-radius: 0px;'}
+                    
                     loading = {isPending}
                     width = {isReply ? 100 : 120}
                 >

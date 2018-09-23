@@ -111,7 +111,7 @@ export const loadComments = (commentsDataState, comments) => {
     console.log('comments ',comments)
     console.log('commentsObject ',commentsObject)
     return {
-        ...commentsDataState,
+        //...commentsDataState,
         ...commentsObject        
     };
 }

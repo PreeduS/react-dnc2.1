@@ -1,160 +1,197 @@
 import React from 'react';
-import axios from 'axios';
-
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import axios from '~/commons/axios';
 import Field from './Field';
+import validation, {usernameStatus} from './RegisterForm/validation';
+import Button from '~/commons/components/Button';
 
-import styles from '../styles/RegisterForm.scss';
+import {register} from '~/commons/actions/user';
+import {getUser} from '~/commons/selectors';
+import services from '~/commons/services';
 
+import * as styles from '../styles/RegisterForm';
+
+const username = {  //tmp
+    minLength: 6
+}
 
 class RegisterForm extends React.Component {
     constructor(){
         super();
         this.state = {
+            usernameStatus: null,
             values:{
                 username:'',
                 password:'',
                 password2:'',
-                email:''
+                //email:''
             },
-            errors:{},
-            pending: false          
+            validation: {
+                messages:{},
+                errors:{},
+                hasErrors: null
+            }     
         }
         this.validationManager = this.validationManager.bind(this);
         this.changeHandler = this.changeHandler.bind(this);
+        this.userHandler = this.userHandler.bind(this);
         this.blurHandler = this.blurHandler.bind(this);
         this.register = this.register.bind(this);
-        this.doesUsernameExists = this.doesUsernameExists.bind(this);
- 
+
     }
     
     register(){
-        this.setState({pending:true});
-        //temp get       
-        axios.get('api/UserManager/register').then( result =>{           
-            console.log(result.data); 
-            this.setState({pending:false});
-        }).catch(error => {
-            console.log('err2 ', error.response);
-            this.setState({pending:false});
-        });        
+        const {username, password} = this.state.values;
+        const {register} = this.props;
+        register(username, password, username + '@zzz.zzz');
     }  
-    doesUsernameExists(username){
-        return axios.get('api/UserManager/userExists?username='+username);
-    }
-    blurHandler(value, mapTo){
-        this.doesUsernameExists(value).then(result=>{
-            let userExists = result.data;
 
+    blurHandler(value, mapTo){
+        if(value.length < username.minLength){ return; }
+
+        this.setState({
+            usernameStatus: usernameStatus.pending
+        },() => this.validationManager(value, 'username'));
+        
+
+        services.doesUserExists(value).then(result=>{
+            const userExists = result.data.userExists;
+            
+            if(this.state.values.username !== value){ return; }
             this.setState({
-                ...this.state,
-                errors:{
-                    ...this.state.errors,
-                    usernameExists: userExists
-                }
-            });
-            this.validationManager(value,'username')
+                usernameStatus: userExists ? usernameStatus.exists : usernameStatus.available
+            }, () => this.validationManager(value, 'username'));
+            
             
         }).catch(error => {
-            console.log('err2 ', error.response);                   
+            this.setState({
+                usernameStatus: null
+             }, () => this.validationManager(this.state.values.username, 'username'));
+                           
         });   
     
     }
 
-    changeHandler(value, mapTo){
-        this.validationManager(value, mapTo);
- 
+    userHandler(value, mapTo){
+        this.setState({
+            usernameStatus: null     
+        },() => this.validationManager(value, mapTo) );
 
     }
-    validationManager(value, mapTo){                                            //split later, in changeHandler
-        //var newErrors =  {...this.state.errors};
-        var newErrors =  {};
-        var newValues;
-        if(mapTo === undefined){
-            newValues = {...this.state.values };
-        }else{
-            newValues = {
-                ...this.state.values,
-                [mapTo]:value
-            };
+    changeHandler(value, mapTo){
+        this.validationManager(value, mapTo);
+    }
+
+    validationManager(value, mapTo){  
+        let newValues =  {...this.state.values};
+        if(mapTo){
+            newValues[mapTo] = value;
         }
-
-        //validations
-        //set usernameExists only on blur, reset on keyup
-        let keyupChange = mapTo === 'username' && value !== this.state.values.username;
-        if(  !keyupChange && this.state.errors.usernameExists){
-            newErrors.usernameExists = this.state.errors.usernameExists;
-        }
-
-        if( newErrors.usernameExists ){ newErrors.username = 'Username is taken'; }
-        else if(newValues.username.indexOf(' ') !== -1){newErrors.username = 'No whitespaces allowed'; }
-        else if(newValues.username.length < 4){newErrors.username = 'Min 4 chars'; }//else{newErrors.username = '';}
-        
-
-        if(newValues.password.length < 6){  
-            newErrors.password = 'Min 6 chars'; 
-        }//else{newErrors.password = '';}
-        
-        if(newValues.password !== newValues.password2 ){
-            newErrors.password2 = 'Passwords don\'t match '; 
-        }//else{ newErrors.password2 = ''; }
-
+        const validationData = validation(newValues, mapTo)(this.state);
 
         this.setState({
             ...this.state,
-            values:newValues,
-            errors: newErrors 
+            values: newValues,
+            validation: validationData
         });
-       
+
     }
-    componentDidMount(){
-        this.validationManager();
-    }
+    //componentDidMount(){ this.validationManager(); }
     
     render() {
-        let {errors} = this.state;
+        const {validation, values , usernameStatus: status} = this.state;
+        const {registerStatus, username} = this.props.user;
+        const loggedIn = username !== null;
+      
+        const isFieldEmpty = Object.keys(values).find( key => values[key] === '' || values[key] === null ) !== undefined;
+        const isDisabled = (
+            validation.hasErrors === null ||
+            validation.hasErrors === true ||
+            isFieldEmpty ||
+            status === usernameStatus.pending 
+        )
+
+        if(loggedIn){
+            return (
+                <styles.RegisterForm>
+                    Already logged in.
+                </styles.RegisterForm>
+            );
+        }
+        
         return (
-            <div className = {styles.registerForm}>
-                RegisterForm    <br />
-          
+            <styles.RegisterForm>
+                <div>RegisterForm</div>    <br />
+        
                 <Field 
                     label = "Username" 
                     type="text" 
-                    errors = {errors.username} 
-                    changeHandler = {this.changeHandler}
+                    errors = {validation.messages.username} 
+                    changeHandler = {this.userHandler}
                     blurHandler = {this.blurHandler}
-                    value = {this.state.values.username}
+                    value = {values.username}
                     mapTo = {'username'}
                 />
                 <Field 
                     label = "Password" 
                     type="password" 
-                    errors = {errors.password}
+                    errors = {validation.messages.password}
                     changeHandler = {this.changeHandler}
-                    value = {this.state.values.password}    
+                    value = {values.password}    
                     mapTo = {'password'}            
                 />
                 <Field 
                     label = "Password verify" 
                     type="password" 
-                    errors = {errors.password2}
+                    errors = {validation.messages.password2}
                     changeHandler = {this.changeHandler}
-                    value = {this.state.values.password2}    
+                    value = {values.password2}    
                     mapTo = {'password2'}            
                 />
 
                 <br />
                 <button 
-                    disabled = {Object.keys(this.state.errors).length >0 || this.state.pending } 
+                    disabled = {isDisabled} 
                     onClick = {this.register}           
                 >
                     Register
                 </button>
+                <Button
+                        onClick = {this.register}
+                        disabled = {isDisabled}
+                        width = {100}
+                        height = {30}
+                        type = "gray"
+                    >
+                    Register
+                    </Button>
+                <Button
+                        onClick = {this.register}
+                        disabled = {isDisabled}
+                        width = {100}
+                        height = {30}
+                 
+                    >
+                    Register
+                    </Button>
+
+
                 <br />
              
 
-            </div>
+            </styles.RegisterForm>
         );
     }
 }
 
-export default RegisterForm;
+const mapStateToProps = state =>( {
+    user: getUser(state),
+});
+const mapDispatchToProps = dispatch=>({
+    register: (username, password, email) =>
+        dispatch(() => register(username, password, email)(dispatch) )
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterForm);

@@ -15,6 +15,7 @@ namespace App.IRepos{
         void Logout();
         Task<ApplicationUser> GetUserAsync(ClaimsPrincipal user);
         string GetUserId(ClaimsPrincipal user);
+        Task<ApplicationUser> FindByNameAsync(string username);
         
     }
 

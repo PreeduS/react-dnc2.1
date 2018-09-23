@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import * as variables from '~/commons/styles/variables';
 
 export const CommentsWrapper = styled.div`
-    border:1px solid ${variables.mainContainerBorderColor};
+
+    border:1px solid ${props => props.theme.mainContainer.borderColor};
     width:100%;
     max-width:600px;
     box-sizing: border-box;
@@ -19,7 +19,8 @@ export const Container = styled.div`
 `;
 
 export const ContentLeft = styled.div`
-    border:1px solid ${variables.mainContainerBorderColor};
+
+    border:1px solid ${props => props.theme.mainContainer.borderColor};
     width:50px;
     height:50px;
     flex-shrink:0;
@@ -36,7 +37,8 @@ export const ContentRight = styled.div`
 
 export const Header = styled.div`
     height:24px;
-    border-bottom:1px solid ${variables.mainContainerBorderColor};
+
+    border-bottom:1px solid ${props => props.theme.mainContainer.borderColor};
     display:flex;
     padding:0px 5px;
 `;

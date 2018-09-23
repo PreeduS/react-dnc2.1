@@ -1,17 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import User from './components/User';
+import UsersContainer from './containers/Users';
 
 class Users extends React.Component{
-
     render(){
-        let users = [1,2,3,4,5];
-
         return(
-            <div>
-                {users.length>0 && users.map(el => <User key = {el}/> ) }
-            </div>
+            <UsersContainer />
         );
     }
 }

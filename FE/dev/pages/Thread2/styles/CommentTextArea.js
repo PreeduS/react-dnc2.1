@@ -1,11 +1,9 @@
 import styled from 'styled-components';
-import * as variables from '~/commons/styles/variables';
 
 export const CommentTextAreaWrapper = styled.div`
-
     textarea{
         background-color: transparent;
-        border: 1px solid ${variables.mainContainerBorderColor};
+        border:1px solid ${props => props.theme.mainContainer.borderColor};
         outline:none;
         resize:none;
         width:100%;
@@ -15,7 +13,6 @@ export const CommentTextAreaWrapper = styled.div`
         max-height:140px;
         overflow: hidden;
         padding:10px 5px;
-
 
     }
 `;

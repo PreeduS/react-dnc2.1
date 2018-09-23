@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import * as variables from '~/commons/styles/variables';
 
 export const FieldContainer = styled.div`
     display:flex;
@@ -30,7 +29,8 @@ export const InputContent = styled.div`
 
 `;
 export const Input = styled.input`
-    color: ${variables.colorLighter};
+
+    color:${props => props.theme.commons.color.lighter};
     border:0px;
     outline:0px;
     height:24px;

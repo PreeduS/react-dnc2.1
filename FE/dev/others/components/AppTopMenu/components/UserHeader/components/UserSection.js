@@ -8,13 +8,10 @@ import LoginForm from '../components/LoginForm';
 
 import {getUser} from '~/commons/selectors';
 import {userStatus} from '~/commons/constants';
-//reducers
-//import UserReducer from '~/commons/reducers/UserReducer';
-//actions
-import {logout} from '~/commons/actions/logout';
-import {login} from '~/commons/actions/login';
 
-import services from '~/commons/services';
+//actions
+import {login, logout} from '~/commons/actions/user';
+
 
 import LoaderHoc from '~/commons/components/LoaderHoc';
 const UserSectionHoc = LoaderHoc(styles.UserSectionContainer);
@@ -24,10 +21,7 @@ class UserSection extends React.Component {
         super();
         this.state = {
             showDropdown:false,
-            //isPending: false        //not used, moved to redux
-            //status: '',
             showStatus: false
-           
         }
         this.dropdownButtonContainerRef = React.createRef(); 
 
@@ -39,7 +33,6 @@ class UserSection extends React.Component {
 
     }
     toggleDropdown(){
-        //if(this.state.isPending){return;}
         const {user} = this.props;
         const isPending = user.loginStatus === userStatus.pending; //|| user.initialLoginStatus === userStatus.pending;
         if(isPending){return;}
@@ -53,30 +46,10 @@ class UserSection extends React.Component {
             this.setState({showDropdown: false});
         }
     }
-    login(username, password){                        //rem add login to redux states
+    login(username, password){      
         const {login} = this.props;
-        login(username ,password);
+        login(username, password);
         this.setState({showStatus:true})
-        //this.setState({showDropdown: false});
-
-        //no status
-     /*   this.setState({
-            status: 'Loading...'
-        });
-        //updateUser()
-        services.login(username, password).then( result =>{
-            this.setState({
-                status: 'Logged in successfully'
-            });
-        }).catch(err => {
-
-            this.setState({
-                status: 'Wrong username of password'
-            });
-        });*/
-
-
-
     }
     logout(){
         const {logout} = this.props;
@@ -124,14 +97,13 @@ class UserSection extends React.Component {
 
     
     render(){
-        const {showDropdown/*, isPending*/} = this.state;
+        const {showDropdown} = this.state;
         const {user} = this.props;
         const {username} = user;
         const loggedIn = username !== null;
-
         const {loginStatus, initialLoginStatus, logoutStatus} = user;
 
-        const isPendingLogin = loginStatus === userStatus.pending;       //not needed -preventClose -> move logic to onDropdownBlur
+        const isPendingLogin = loginStatus === userStatus.pending;
         const isPendingLogout = logoutStatus === userStatus.pending;   
         const isInitialPending = initialLoginStatus === userStatus.pending;
 
@@ -156,8 +128,7 @@ class UserSection extends React.Component {
                 <styles.DropDownContainer>
                     <Dropdown 
                         showDropdown = {showDropdown} 
-                        onDropdownBlur = {this.dropdownBlur} 
-                        preventClose = {isPendingLogin}
+                        onDropdownBlur = {this.dropdownBlur}
                     >
                         {!loggedIn && 
                             <LoginForm 
@@ -177,14 +148,12 @@ class UserSection extends React.Component {
     }
 
 }
-//LoginForm --- isPending = {isPending}        isPendingHandler = {this.isPendingHandler}loginStatus = {loginStatus}
 
 const mapStateToProps = state=> ({
     user:getUser(state)
 });
 const mapDispatchToProps = (dispatch)=>({
     login: (username, password) => 
-        //dispatch(login(username))
         dispatch(()=> login(username, password)(dispatch) )
     ,    
     logout: () =>{

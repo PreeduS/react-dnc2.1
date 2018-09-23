@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import * as variables from '~/commons/styles/variables';
-
 
 export const Content = styled.div`
-    border-bottom:1px solid ${variables.mainContainerBorderColor};
+
+    border-bottom:1px solid ${props => props.theme.mainContainer.borderColor};
     box-sizing:border-box;
     background:rgb(251,251,251);
     background: #FAFAFA;
@@ -14,7 +13,8 @@ export const Content = styled.div`
     
     >div{
         width:100%; 
-                                     border:0px solid ${variables.mainContainerBorderColorLighter};
+                                  
+        border:0px solid ${props => props.theme.mainContainer.borderColorLighter};
         margin:auto 0px;
         min-height:60px;
         display: flex;
@@ -28,12 +28,14 @@ export const LeftContainer = styled.div`
     flex-basis: 60px;
     height:60px;
     margin-right:10px;
-    border:1px solid ${variables.mainContainerBorderColorLighter};
+
+    border:1px solid ${props => props.theme.mainContainer.borderColorLighter};
 `;
 
 export const RightContainer = styled.div`
     flex:1;    
-                                    border:0px solid ${variables.mainContainerBorderColorLighter};
+ 
+                                    border:0px solid ${props => props.theme.mainContainer.borderColorLighter};
     padding-top:5px;
 `;
 

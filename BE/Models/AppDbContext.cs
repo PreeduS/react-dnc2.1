@@ -9,8 +9,8 @@ namespace App.Models{
     //public class AppDbContext : DbContext{
     public class AppDbContext : IdentityDbContext<ApplicationUser>{
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options){ }
-        /*public DbSet<Comment> Comments { get; set; }
-        public DbSet<Thread> Threads { get; set; }*/
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Thread> Threads { get; set; }
 
         public DbQuery<CommentViewModel> CommentDbQuery { get; set; }
 

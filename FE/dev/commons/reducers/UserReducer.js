@@ -4,10 +4,10 @@ import commonTypes, {actionTypes} from '../actionTypes';
 import {userStatus} from '~/commons/constants';
 
 //move to state.user
-const UserReducer = (state = initialState, action) =>{
+const UserReducer = (state = initialState.userReducer, action) =>{
     switch(action.type){
         //login
-        case actionTypes.login + commonTypes.status.pending:
+        case actionTypes.user.login + commonTypes.status.pending:
             return{
                 ...state,
                 user:{
@@ -16,16 +16,18 @@ const UserReducer = (state = initialState, action) =>{
                     loginStatus: userStatus.pending
                 }
             };
-        case actionTypes.login + commonTypes.status.fulfilled:
+        case actionTypes.user.login + commonTypes.status.fulfilled:
             return{
                 ...state,
                 user:{
                     ...state.user,
                     loginStatus: userStatus.fulfilled,
+                    logoutStatus: null,
+                    registerStatus: null,
                     username: action.payload.username
                 }
             };
-        case actionTypes.login + commonTypes.status.rejected:
+        case actionTypes.user.login + commonTypes.status.rejected:
             return{
                 ...state,
                 user:{
@@ -36,26 +38,27 @@ const UserReducer = (state = initialState, action) =>{
             };
 
         //logout
-        case actionTypes.logout + commonTypes.status.pending:
+        case actionTypes.user.logout + commonTypes.status.pending:
+            return{
+                ...state,
+                user:{
+                    ...state.user,
+                    //username: null,
+                    logoutStatus: userStatus.pending
+                }
+            };
+        case actionTypes.user.logout + commonTypes.status.fulfilled:
             return{
                 ...state,
                 user:{
                     ...state.user,
                     username: null,
-                    logoutStatus: userStatus.pending
+                    logoutStatus: userStatus.fulfilled,
+                    loginStatus: null,
+                    registerStatus: null  
                 }
-            };
-        //on logout reset loginStatus
-        case actionTypes.logout + commonTypes.status.fulfilled:
-        return{
-            ...state,
-            user:{
-                ...state.user,
-                username: null,
-                logoutStatus: userStatus.fulfilled
-            }
-        };   
-        case actionTypes.logout + commonTypes.status.rejected:
+            };   
+        case actionTypes.user.logout + commonTypes.status.rejected:
             return{
                 ...state,
                 user:{
@@ -63,8 +66,40 @@ const UserReducer = (state = initialState, action) =>{
                     logoutStatus: userStatus.rejected
                 }
             };     
+        //register
+        case actionTypes.user.register + commonTypes.status.pending:{
+            return{
+                ...state,
+                user:{
+                    ...state.user,
+                    registerStatus: userStatus.pending,
+                    username: null
+                }
+            };
+        }
+        case actionTypes.user.register + commonTypes.status.fulfilled:{
+            let {username} = action.payload;
+            return{
+                ...state,
+                user:{
+                    ...state.user,
+                    registerStatus: userStatus.fulfilled,
+                    username
+                }
+            };
+        }
+        case actionTypes.user.register + commonTypes.status.rejected:{
+            return{
+                ...state,
+                user:{
+                    ...state.user,
+                    registerStatus: userStatus.rejected
+                }
+            };
+        }
+
         //getUserData    
-        case actionTypes.getUserData + commonTypes.status.pending:
+        case actionTypes.user.getUserData + commonTypes.status.pending:
             return{
                 ...state,
                 user:{
@@ -74,7 +109,7 @@ const UserReducer = (state = initialState, action) =>{
                     initialLoginStatus: userStatus.pending
                 }
             };
-        case actionTypes.getUserData + commonTypes.status.fulfilled:
+        case actionTypes.user.getUserData + commonTypes.status.fulfilled:
             return{
                 ...state,
                 user:{
@@ -84,7 +119,7 @@ const UserReducer = (state = initialState, action) =>{
                     initialLoginStatus: userStatus.fulfilled
                 }
             };
-        case actionTypes.getUserData + commonTypes.status.rejected:
+        case actionTypes.user.getUserData + commonTypes.status.rejected:
             return{
                 ...state,
                 user:{
@@ -94,6 +129,8 @@ const UserReducer = (state = initialState, action) =>{
                     initialLoginStatus: userStatus.rejected //not logged in
                 }
             };
+
+        //rem - add update option to reset state on unmount
 
     }
     return state;

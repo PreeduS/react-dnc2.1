@@ -2,31 +2,23 @@ import React from 'react';
 import AppRouter from '../router'
 import store from '../store';
 import {Provider} from 'react-redux';
+import {ThemeProvider} from 'styled-components';
+import theme from './theme';
+import * as styles from './appStyles';
 
-import styles from './App.scss';
+import injectGlobal from './injectGlobal'
 
-import {actionTypes} from '~/commons/actionTypes';
-import {getUserData} from '~/commons/actions/getUserData';
-
-import axios from 'axios';
-//if dev
-axios.defaults.baseURL = 'http://localhost:3001';
-axios.defaults.withCredentials = true;              //cors
-
-const App = ()=>(
-    <div>
-        <div className = {styles.app}>
+const App = () => (
+    <styles.App>
+        <ThemeProvider theme = {theme}>
             <Provider store = {store}>
                 <AppRouter />
             </Provider>
-        </div>
-
-    </div>
+        </ThemeProvider>
+    </styles.App>
 
 );
 
-//load initial data
-//store.dispatch({type: actionTypes.getUserData})
-getUserData(store.dispatch);
+
 
 export default App;

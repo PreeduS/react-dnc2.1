@@ -7,10 +7,10 @@ class User extends React.Component{
             <UserWrapper>
 
                 <LeftContainer>
-                    Left
+                     
                 </LeftContainer>
                 <RightContainer>
-                    Right
+                    {this.props.username}
                 </RightContainer>
 
             </UserWrapper>

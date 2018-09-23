@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-//import * as variables from '~/commons/styles/variables';
 
 export const UserSection = styled.div`
-           border:1px solid gray;
+
     position:relative;
 `;
 export const UserSectionContainer = styled.div`

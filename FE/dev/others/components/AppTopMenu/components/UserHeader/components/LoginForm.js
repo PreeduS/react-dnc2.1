@@ -1,7 +1,9 @@
 import React from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import axios from '~/commons/axios';
 
 import Field from '~/commons/components/Field';
+import * as styles from '../styles/LoginForm'
 
 //import services from '~/commons/services';
 
@@ -13,33 +15,14 @@ class LoginForm extends React.Component{
 
         this.state = {
             username:'',
-            password:'',
-           // status:''
+            password:''
         }
     }
 
     login(){
-        //this.setState({status:''});
         const {username, password} = this.state;
-        const {login} = this.props;
-        
+        const {login} = this.props;        
         login(username, password);
-/*
-        //isPendingHandler - not used
-        isPendingHandler(true);    
-        services.login(username, password).then( result =>{
-            isPendingHandler(false); 
-            this.setState({
-                status: 'Logged in successfully'
-            });
-            login(username);
-        }).catch(err => {
-            isPendingHandler(false);   
-            this.setState({
-                status: 'Wrong username of password'
-            });
-        });*/
-
     }
 
     changeHandler(value, mapTo){
@@ -47,32 +30,13 @@ class LoginForm extends React.Component{
             [mapTo]:value
         });
     }
-    /*static getDerivedStateFromProps(nextProps, prevState){
-        console.log('nextProps' , nextProps)
-        console.log('prevState' , prevState)
-        return prevState;
-    }*/
 
     render(){
-        const {username, password, /*status*/} = this.state;
-        //const {isPending} = this.props;
-       // const {loginStatus} = this.props;
+        const {username, password} = this.state;
         const {statusMessage, disabled} = this.props;
 
-       /* let status = '';
-        if(loginStatus === 'fulfilled'){
-            status = 'Logged in successfully';
-        }
-        if(loginStatus === 'rejected'){
-            status = 'Wrong username of password';
-        }
-        if(loginStatus === 'pending'){
-            status = 'Loading...';
-        }*/
-        
         return(
-            <div>
-
+            <styles.LoginForm>
                 <Field
                     type= "text"
                     label="Username"
@@ -95,7 +59,7 @@ class LoginForm extends React.Component{
                 {statusMessage}
                 <br />
                 <button disabled = {disabled} onClick = {this.login}>Login</button>
-            </div>
+            </styles.LoginForm>
         );
     }
 }

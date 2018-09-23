@@ -3,6 +3,7 @@ import logger from 'redux-logger'
 import promise from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
 
+import loadInitialData from './loadInitialData'
 import rootReducers from './rootReducers';
 
 const store = createStore(
@@ -13,5 +14,7 @@ const store = createStore(
     applyMiddleware(logger,thunk,promise())
 
 );
+
+loadInitialData(store);
 
 export default store;
