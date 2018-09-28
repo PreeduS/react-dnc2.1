@@ -2,9 +2,9 @@ import React from 'react';
 import {connect} from 'react-redux';
 import axios from '~/commons/axios';
 
-import styles from './styles/Threads.scss';
 
-import Thread from './components/Thread';
+
+import ThreadsContainer from './containers/Threads';
 
 class Threads extends React.Component {
     constructor(){
@@ -33,16 +33,40 @@ class Threads extends React.Component {
     }
 
     render(){
-        let {threads} = this.state
+        //let {threads} = this.state
+
+
+        //temp
+        const threads = [
+            {id:1, title:'test1', username:'uname'},
+            {id:2, title:'test2', username:'uname2'},
+            {id:2, title:'test2', username:'uname2'},
+            {id:2, title:'test2', username:'uname2'},
+            {id:1, title:'test1', username:'uname'},
+            {id:2, title:'test2', username:'uname2'},
+            {id:2, title:'test2', username:'uname2'},
+            {id:2, title:'test2', username:'uname2'},
+            {id:2, title:'test2', username:'uname2'},
+            {id:2, title:'test2', username:'uname3'},
+            {id:2, title:'test2', username:'uname2'},
+            {id:2, title:'test2', username:'uname3'},
+        ]
+
         return(
             <div>
-                {threads.length > 0 && threads.map(t => 
-                    <Thread key = {t.id} {...t}/>
-                )}
+              
+                    <ThreadsContainer threads = {threads}/>
+         
 
             </div>
         );
     }
 }
+
+/*
+                {threadData.length > 0 && threadData.map(t => 
+                    <Threads key = {t.id} {...t}/>
+                )}
+*/
 
 export default Threads;

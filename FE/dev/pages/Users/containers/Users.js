@@ -5,7 +5,11 @@ import PropTypes from 'prop-types';
 import {loadUsers} from '../actions';
 import {getUsers} from '../selectors';
 
-import User from '../components/User';
+//import User from '../components/User';
+
+import Table, {Header, Body, Row, Column} from '~/commons/components/Table';
+import UserRow from '../components/UserRow';
+
 
 class Users extends React.Component {
 
@@ -14,16 +18,45 @@ class Users extends React.Component {
     }
     render() {
         const {users} = this.props;
-        const usersData = users.data;
+        //const usersData = users.data;
+        const usersData = [
+            {username : 'test'},
+            {username : 'test2'},
+        ];
+        console.log('usersData ',usersData)
 
         return(
+            <div style= {{margin:'30px'}}>
+                <Table>
+                    <Header>
+                        <Row showBorder = {'horizontal'}> 
+                            <Column width = {'60px'}>Logo temp</Column>
+                            <Column width = {'400px'}>main content temp</Column>
+                        </Row>
+                    </Header>
+                    <Body>
+                        {usersData.length > 0 && usersData.map( (val , index) => 
+                            <UserRow 
+                                logoSrc = {''} 
+                                username = {val.username}
+                                showBorder = {'horizontal'}
+                            /> 
+                        )}
+                    </Body>
+
+                </Table>
+            </div>
+        );
+
+        /*return(
             <div>
                 {usersData.length > 0 && usersData.map( (val , index) => 
                     <User key = {index} username = {val.username}/> 
                 )}
                 
             </div>
-        );
+        );*/
+
     }
 }
 
