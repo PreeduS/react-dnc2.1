@@ -39,22 +39,24 @@ const BaseButton = styled.div`
 export const ButtonDefault = BaseButton.extend`
 
     &&&&&>button{
-        background-color:initial !important;
 
-        border-color: ${props => props.theme.mainContainer.borderColor};
-        color:${props => props.theme.commons.color.lighter} !important;
+        background-color: ${props => props.theme.ui.button.default.backgroundColor} !important;
+
+        border-color: ${props => props.theme.ui.button.default.borderColor} !important;
+        color:${props => props.theme.ui.button.default.color} !important;
         
         &:hover{
-            background-color:rgb(241, 242, 246) !important;
-            color: ${props => props.theme.button.default.colorHover} !important;
+            background-color: ${props => props.theme.ui.button.default.backgroundColorHover} !important;
+            color: ${props => props.theme.ui.button.default.colorHover} !important;
         }
         &:active{
-            background-color:rgb(237, 238, 243) !important;
-            color: ${props => props.theme.button.default.colorActive} !important;
+            background-color: ${props => props.theme.ui.button.default.backgroundColorActive} !important;
+            color: ${props => props.theme.ui.button.default.colorActive} !important;
+            border-color: ${props => props.theme.ui.button.default.borderColorActive} !important;
         }
 
         &:disabled{
-            color:rgba(40,40,40,.4) !important;
+            color: ${props => props.theme.ui.button.default.colorDisabled} !important;
         }        
 
         ${props => props.inlineStyles}        
@@ -65,8 +67,8 @@ export const ButtonGray = BaseButton.extend`
     &&&&&>button{
         background-color:rgb(241, 242, 246) !important;
 
-        border-color: ${props => props.theme.mainContainer.borderColor};
-        color:${props => props.theme.commons.color.lighter} !important;
+        border-color: ${props => props.theme.ui.button.gray.borderColor} !important;
+        color:${props => props.theme.ui.button.gray.color} !important;
 
         &:hover{
             background:rgb(239, 240, 245) !important;
@@ -74,7 +76,7 @@ export const ButtonGray = BaseButton.extend`
         }
         &:active{
             background:rgb(236,237,242) !important;
-            border:1px solid rgb(234,234,234) !important;
+            border-color: ${props => props.theme.ui.button.gray.borderColorActive} !important;
         }
         &:disabled{
             color:rgba(77,77,77,.6) !important;

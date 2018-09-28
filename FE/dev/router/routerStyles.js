@@ -3,12 +3,11 @@ import styled from 'styled-components';
 export const AppBody = styled.div` 
     display:flex;
     flex-direction:column;
-    background:${props => props.theme.mainContainer.backgroundColor};
     min-height:100%;
+    background:${props => props.theme.mainContainer.backgroundColor};
 
 `;
 export const AppWrapper = styled.div`
-    //width:100%;
     position:relative;
     display:flex;
     flex-grow:1;
@@ -23,6 +22,7 @@ export const AppMainContainer = styled.div`
     width:100%;
     overflow: hidden;
     padding-bottom:50px;
+    color:${props => props.theme.mainContainer.color};
       
 `;
 
@@ -35,14 +35,15 @@ export const AppMainContainer = styled.div`
 export const AppSideMenu = styled.div`
     position: fixed;
     right:0px;
-    top:${props => props.theme.topMenu.height};
     bottom:0px;
     box-sizing: border-box;
     padding:0px 10px; 
-    background: ${props => props.theme.sideMenu.backgroundColor};;   
     height:100%;
     display: inline-block;
     vertical-align: top;
+    background: ${props => props.theme.sideMenu.backgroundColor};;   
+    color:${props => props.theme.sideMenu.color};
+    top:${props => props.theme.topMenu.height};
     width: ${props => props.theme.sideMenu.width};
     border-left:1px solid ${props => props.theme.sideMenu.borderColor};
         
