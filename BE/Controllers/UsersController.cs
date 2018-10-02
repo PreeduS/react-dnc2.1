@@ -12,6 +12,7 @@ namespace App.Controllers{
         [Route("GetUsers")]
         public IActionResult GetUsers(){
             return Json(Repo.GetUsers().Select(x => new {
+                Id = x.Id,
                 Username = x.UserName
             }));
         }        

@@ -8,13 +8,15 @@ class Body extends React.Component{
     render(){
 
         const {children} = this.props;
-        const rows = React.Children.map(children, (child, index) => {
+
+        const rows = children ? React.Children.map(children, (child, index) => {
             let isFirst = index === 0;
             let isLast = index === React.Children.count(children) - 1;
 
             return React.cloneElement(child, {isFirst, isLast, isHeader: false})
-        })
-        console.log('body',rows)
+        }) : [];
+
+        console.log('body',rows, children)
 
         return(
             <React.Fragment>

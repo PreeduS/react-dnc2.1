@@ -28,7 +28,7 @@ class Comment extends React.Component {
 
     addNewReply(content){ 
         const {id} = this.props;
-        let threadId = this.props.thread.id;
+        const threadId = this.props.threadId;
         const reply = {replyTo: id, content, threadId};
 
         this.props.addReply(reply);

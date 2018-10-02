@@ -34,7 +34,7 @@ namespace App.Controllers{
                 return BadRequest(new {Success = false, Errors = "Invalid arguments"} );
             }
 
-            IEnumerable<CommentViewModel> result =  await Repo.LoadCommentsAsync(ThreadId);
+            IEnumerable<CommentViewModel> result = await Repo.LoadCommentsAsync(ThreadId);
 
             return Json(result);
         }

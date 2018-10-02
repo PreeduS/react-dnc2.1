@@ -1,10 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import CommentsReducer from '../reducers/CommentsReducer'
-//import ThreadReducer from '../reducers/ThreadReducer'
-import {addComment, loadMoreComments } from '../actions/comments';
-import {updateTextarea } from '../actions/index';
+import CommentsReducer from '../reducers/CommentsReducer';
+
+import {addComment, loadMoreComments} from '../actions/comments';
+import {updateTextarea} from '../actions/index';
 
 import {getComments, geThread} from '../selectors'
 import getCommentsList from '../commons/getCommentsList'
@@ -26,7 +26,7 @@ class Comments extends React.Component {
     }
 
     addNewComment(content){
-        const threadId = this.props.thread.id;
+        const threadId = this.props.threadId; //this.props.thread.id;
         const comment = {content, threadId};
         this.props.addComment(comment);
     }
@@ -46,7 +46,7 @@ class Comments extends React.Component {
         );
         const lastId = lastComment === undefined ? null : lastComment.id;
 
-        const threadId = thread.id;
+        const threadId = this.props.threadId;// thread.id;
         this.props.loadMoreComments(threadId, lastId)
     }
 
@@ -97,6 +97,7 @@ class Comments extends React.Component {
                     disabled = {isPending || isDisabled} 
                     onClick = {this.loadMoreComments}
                     label = {isDisabled ? 'No more comments' : 'Load more comments'}
+                    threadId = {this.props.threadId}
                 />                                
             </styles.CommentsWrapper>
         );
@@ -109,7 +110,7 @@ Comments.propTypes = {
 
 };
 
-const mapStateToProps = state =>( {
+const mapStateToProps = state =>({
     comments: getComments(state),
     thread: geThread(state),
 });

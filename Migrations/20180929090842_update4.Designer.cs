@@ -3,15 +3,17 @@ using System;
 using App.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace App.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180929090842_update4")]
+    partial class update4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,10 +80,7 @@ namespace App.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Categories");
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("App.Models.Comment", b =>
@@ -117,6 +116,8 @@ namespace App.Migrations
 
                     b.Property<int>("CategoryId");
 
+                    b.Property<int?>("CategoryId1");
+
                     b.Property<string>("Content");
 
                     b.Property<string>("LogoPath");
@@ -131,6 +132,8 @@ namespace App.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("CategoryId1");
 
                     b.HasIndex("UserId");
 
@@ -259,10 +262,14 @@ namespace App.Migrations
 
             modelBuilder.Entity("App.Models.Thread", b =>
                 {
-                    b.HasOne("App.Models.Category", "Category")
+                    b.HasOne("App.Models.Category")
                         .WithMany("Threads")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("App.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId1");
 
                     b.HasOne("App.Models.ApplicationUser", "User")
                         .WithMany("Threads")

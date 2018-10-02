@@ -6,7 +6,7 @@ import UsersComponent from '../pages/Users';
 const routes = [
     {
         label: 'Thread',
-        path: '/Thread',
+        path: '/Thread/:id',
         component: ThreadComponent
     },
     {

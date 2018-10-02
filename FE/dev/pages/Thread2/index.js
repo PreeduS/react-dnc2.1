@@ -14,16 +14,18 @@ import * as styles from './styles/Thread';
 
 class Thread extends React.Component {
     componentDidMount(){
-        const threadId = this.props.thread.id;
+        //const threadId = this.props.thread.id;
+        const threadId = this.props.match.params.id;
         this.props.loadComments(threadId);
     }
     render() {
         const {comments} = this.props;
         const isLoading = false;//Object.keys(comments.data).length === 0;//and loaderStatus === loaderStatus.pending;
+        const threadId = this.props.match.params.id;
         return (
             <styles.ThreadWrapper>
-                <Content />
-                <CommentsHoc loading = {isLoading} />
+                <Content threadId = {threadId}/>
+                <CommentsHoc loading = {isLoading} threadId = {threadId}/>
             </styles.ThreadWrapper>
         );
     }

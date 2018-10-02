@@ -17,29 +17,22 @@ class Users extends React.Component {
         this.props.loadUsers();
     }
     render() {
-        const {users} = this.props;
+        const users = this.props.users.data;
         //const usersData = users.data;
-        const usersData = [
-            {username : 'test'},
-            {username : 'test2'},
-        ];
-        console.log('usersData ',usersData)
+
+        console.log('users ',users)
 
         return(
-            <div style= {{margin:'30px'}}>
+            <div style= {{marginTop:'30px'}}>
                 <Table>
-                    <Header>
-                        <Row showBorder = {'horizontal'}> 
-                            <Column width = {'60px'}>Logo temp</Column>
-                            <Column width = {'400px'}>main content temp</Column>
-                        </Row>
-                    </Header>
+
                     <Body>
-                        {usersData.length > 0 && usersData.map( (val , index) => 
+                        {users.length > 0 && users.map( (val , index) => 
                             <UserRow 
                                 logoSrc = {''} 
                                 username = {val.username}
                                 showBorder = {'horizontal'}
+                                height = {'50px'}
                             /> 
                         )}
                     </Body>
@@ -64,6 +57,17 @@ class Users extends React.Component {
                 {Object.keys(usersData).length > 0 && Object.keys(usersData).map(key => 
                     <User key = {key} username = {usersData[key].username}/> 
                 )}
+
+
+                    <Header>
+                        <Row showBorder = {'horizontal'}> 
+                            <Column width = {'60px'}>Logo temp</Column>
+                            <Column width = {'400px'}>main content temp</Column>
+                        </Row>
+                    </Header>
+
+
+
 */
 
 Users.propTypes = {

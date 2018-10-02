@@ -9,13 +9,12 @@ import MainContent from './MainContent';
 class UserRow extends React.Component{
     render(){
         const {username, ...rest} = this.props;
-        console.log( this.props)
         return(
             <Row {...rest}>
-                <Column width = {'60px'}>  
+                <Column width = {'50px'}>  
                    <Logo />
                 </Column>
-                <Column width = {'400px'}>  
+                <Column>  
                     <MainContent username = {username}/>
                 </Column>
 

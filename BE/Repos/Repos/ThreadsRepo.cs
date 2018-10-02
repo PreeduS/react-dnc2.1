@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using App.IRepos;
 using App.Models;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Repos{
 
@@ -16,7 +16,11 @@ namespace App.Repos{
         }
 
         public List<Thread> GetThreads() {
-            List<Thread> result = Context.Threads.Take(10).ToList();
+            //List<Thread> result = Context.Threads.Take(10).ToList();
+            List<Thread> result = Context.Threads
+            .Include(t => t.User)
+            .Include(t => t.Category)
+            .Take(10).ToList();
 
             //result.Select( x => {
             //List<ThreadViewModel> r2 = 

@@ -43,7 +43,7 @@ class CommentGroup extends React.Component {
             });   */
         }
 
-        const threadId = this.props.thread.id;
+        const threadId = this.props.threadId; //this.props.thread.id;
         this.props.loadMoreReplies(threadId, id, lastReplyId)
     }
 

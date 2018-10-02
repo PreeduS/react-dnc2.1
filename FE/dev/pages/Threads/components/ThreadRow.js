@@ -10,14 +10,15 @@ class ThreadRow extends React.Component{
     
     render(){
 
-        const {username, ...rest} = this.props;
+        const {thread, ...rest} = this.props;
+
         return(
             <Row {...rest}>
                 <Column width = {'70px'}>  
-                    <Logo />
+                    <Logo logoPath = {thread.logoPath} />
                 </Column>
                 <Column>  
-                    <MainContent username = {username}/>
+                    <MainContent thread = {thread}/>
                 </Column>
                 <Column width = {'100px'}>
                     <styles.Category>Placeholder</styles.Category>
