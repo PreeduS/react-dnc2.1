@@ -10,6 +10,7 @@ using App.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace App.ReposMockup{
 
    
@@ -46,8 +47,8 @@ namespace App.ReposMockup{
                     }
                 }
             };
-
-            return resultVModel;
+            return await Task.FromResult(resultVModel);
+            //return resultVModel;
 
 
 

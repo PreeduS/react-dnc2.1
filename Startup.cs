@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using App.Config;
 using Microsoft.AspNetCore.Identity;
 using App.Config.Extensions;
+using App.ReposMockup;
 
 namespace App{
     public class Startup
@@ -28,7 +29,7 @@ namespace App{
             
        
             if(Configuration.UseMockups()){
-                services.AddDbContext<AppDbContext>(option => option.UseInMemoryDatabase() );
+                services.AddDbContext<AppDbContext>(option => option.UseInMemoryDatabase("TestDB") );
 
             }else if(Configuration.UseSqlite()){
                 services.AddDbContext<AppDbContext>(option => option.UseSqlite(Configuration["db:sqlite:connectionString"]) );
@@ -39,10 +40,17 @@ namespace App{
                 );
             }
 
-            services.AddTransient<ICommentRepo, CommentRepo>();
+            if(Configuration.UseMockups()){
+                services.AddTransient<ICommentRepo, CommentRepoMockup>();
+                services.AddTransient<IUsersRepo, UserRepoMockup>();
+            }else{
+                services.AddTransient<ICommentRepo, CommentRepo>();
+                services.AddTransient<IUsersRepo, UsersRepo>();
+            }
+
             services.AddTransient<IUserManagerRepo, UserManagerRepo>();
-            services.AddTransient<IUsersRepo, UsersRepo>();
             services.AddTransient<IThreadsRepo, ThreadsRepo>();
+
 
             //Identity
             services.AddIdentity<ApplicationUser,IdentityRole>()

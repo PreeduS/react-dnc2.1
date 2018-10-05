@@ -3,7 +3,10 @@ const webpack = require('webpack');
 //plugins
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+//const ExtractTextPlugin = require("extract-text-webpack-plugin");
+//const MiniCssExtractPlugin = require("mini-css-extract-plugin"); //check
+
+
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const entry = './dev';
@@ -52,10 +55,10 @@ module.exports = {
             }            
         }),
         new CleanWebpackPlugin([output+'/*.*']),
-        new ExtractTextPlugin({
+        /*new ExtractTextPlugin({
             filename: 'styles.css',
             disable: !isProd        //not compatible with React Hot Loader
-        }),   
+        }),   */
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': !isProd ? '"development"' : '"production"'
         }),             

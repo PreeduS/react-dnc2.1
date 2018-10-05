@@ -7,7 +7,6 @@ using App.Models;
 namespace App.Repos{
 
    
-    //public class UsersRepo : Repository<ApplicationUser>, IUsersRepo{
     public class UsersRepo : Repository<ApplicationUser>, IUsersRepo{
         private readonly AppDbContext Context;
         public UsersRepo(AppDbContext context) : base(context){
