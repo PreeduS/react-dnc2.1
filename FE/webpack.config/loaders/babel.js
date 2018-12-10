@@ -7,5 +7,10 @@ module.exports = {
             presets: ['env','stage-2','react'],
             //plugins: ["react-hot-loader/babel"]
         }
+    },{
+        loader: 'eslint-loader',
+        options:{
+            
+        }
     }]
 };

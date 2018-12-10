@@ -29,6 +29,7 @@ class Users extends React.Component {
                     <Body>
                         {users.length > 0 && users.map( (val , index) => 
                             <UserRow 
+                                key = {index}
                                 logoSrc = {''} 
                                 username = {val.username}
                                 showBorder = {'horizontal'}
