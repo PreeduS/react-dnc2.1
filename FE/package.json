@@ -1,7 +1,9 @@
 {
   "scripts": {
-    "start": "webpack-dev-server",
+    "start": "webpack-dev-server --type=serve",
     "webpack": "webpack --mode=development --watch",
+    "build": "webpack --mode=production --type=build",
+    "build:dev": "webpack --mode=development --type=build",
     "lint": "eslint ./dev/app/"
   },
   "dependencies": {
@@ -44,6 +46,7 @@
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
     "uglifyjs-webpack-plugin": "^1.2.5",
+    "url-loader": "^1.1.2",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.9"

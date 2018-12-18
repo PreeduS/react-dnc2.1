@@ -17,14 +17,27 @@ const entry = './dev';
 const output = './build';
 //const isProd = false;//temp //process.env.NODE_ENV
 
-
+const mode = {
+    production: 'production',
+    development: 'development',
+}
+const type = {
+    build: 'build',
+    serve: 'serve',
+}
 
 
 //module.exports = {
 module.exports = (env, argv) => {
-    const isProd = argv.mode === 'production';
+    const isProd = argv.type === type.build && argv.mode === mode.production;
+    const isBuild = argv.type === type.build;
+
     //chalk
-    argv.mode && console.log('running in ' + argv.mode);
+    if(isBuild){
+        console.log(`building in ${isProd ? mode.production : mode.development}`);
+    }else{
+        console.log(`running in ${isProd ? mode.production : mode.development}`);
+    }
 
     return {
         /*entry:{
@@ -60,7 +73,7 @@ module.exports = (env, argv) => {
             }
         },
         plugins: [
-            ...getPlugins({isProd}),
+            ...getPlugins({isProd, isBuild}),
             /*new ExtractTextPlugin({
                 filename: 'styles.css',
                 disable: !isProd        //not compatible with React Hot Loader
@@ -71,32 +84,30 @@ module.exports = (env, argv) => {
 
 }
 
-function getPlugins({isProd}) {
+function getPlugins({isProd, isBuild}) {
     const shared = [
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': isProd ? '"production"' : '"development"'
         }),  
+        new CaseSensitivePathsPlugin(),
     ];
     const plugins = {
-        dev: [
-            ...shared,
-            new CaseSensitivePathsPlugin(),
-            new UglifyJsPlugin({
-                sourceMap: true,        //cheap-source-map options don't work with this plugin.
-                extractComments: 'all',
-            })
+        //dev: [
+        serve: [
+            ...shared,     
+
         ],
-        prod: [
+        //prod: [
+        build: [
             ...shared,
             new HtmlWebpackPlugin({
                 template: entry+ '/index.html',
-                title:'App',
-                minify:{
-                    collapseWhitespace: true,
-                    removeComments: true,
-                    removeRedundantAttributes: true,
-                    removeScriptTypeAttributes: true,
-                    removeStyleLinkTypeAttributes: true,
+                minify: {
+                    collapseWhitespace: isProd,
+                    removeComments: isProd,
+                    removeRedundantAttributes: isProd,
+                    removeScriptTypeAttributes: isProd,
+                    removeStyleLinkTypeAttributes: isProd,
                     useShortDoctype: true
                 }            
             }),
@@ -107,9 +118,12 @@ function getPlugins({isProd}) {
                 filename: '[name].css',
                 chunkFilename: "[id].css"
             }),
-
+            new UglifyJsPlugin({
+                sourceMap: true,        //cheap-source-map options don't work with this plugin.
+                extractComments: 'all',
+            })
         ]
     }
 
-    return isProd ? plugins.prod : plugins.dev;
+    return isBuild ? plugins.build : plugins.serve;
 }
