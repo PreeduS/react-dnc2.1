@@ -55,6 +55,7 @@ class Threads extends React.Component {
                 <Body>
                     {threads.length > 0 && threads.map( (thread , index) => 
                         <ThreadRow 
+                            key = {index}
                             thread = {thread}
                             showBorder = {'horizontal'}
                             height = {'80px'}

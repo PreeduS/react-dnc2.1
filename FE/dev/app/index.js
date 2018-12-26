@@ -6,7 +6,7 @@ import {ThemeProvider} from 'styled-components';
 import theme from './theme';
 import * as styles from './appStyles';
 
-import injectGlobal from './injectGlobal'
+//import injectGlobal from './injectGlobal'
 
 const App = () => (
     <styles.App>
